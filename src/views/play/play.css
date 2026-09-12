@@ -1,0 +1,214 @@
+/* Play view — values transcribed from the prototype's showPlay block. */
+
+main.play {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  padding: 18px 24px 40px;
+}
+.play-inner {
+  max-width: 1560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.play .spacer {
+  flex: 1;
+}
+
+/* ------------------------------------------------------------ action roll */
+
+.play-hero {
+  border: 2px solid var(--red);
+  background: var(--paper-light);
+  box-shadow: 3px 3px 0 rgba(34, 28, 19, 0.22);
+  padding: 12px 16px;
+}
+.hero-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hero-title {
+  font-family: var(--font-title);
+  font-size: 17px;
+  letter-spacing: 2px;
+  color: var(--red);
+}
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.flow-pair {
+  display: contents;
+}
+.flow .step {
+  border: 1px solid var(--ink);
+  padding: 4px 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: var(--paper);
+}
+.flow .step.red {
+  background: var(--red);
+  color: var(--paper-light);
+}
+.flow .arr {
+  color: var(--red);
+}
+.hero-note {
+  font-style: italic;
+  font-size: 13px;
+  color: var(--muted);
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.3fr;
+  gap: 18px;
+  margin-top: 12px;
+}
+.play .bullets {
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.positions {
+  font-size: 13px;
+  line-height: 1.5;
+  border-left: 1px dotted rgba(34, 28, 19, 0.4);
+  padding-left: 16px;
+}
+.positions .pos {
+  display: flex;
+  gap: 8px;
+}
+.positions .pos b {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  width: 88px;
+  flex: none;
+}
+.positions .pos span {
+  font-style: italic;
+}
+.positions .effect {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.conseq {
+  border-left: 1px dotted rgba(34, 28, 19, 0.4);
+  padding-left: 16px;
+}
+.play .eyebrow {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--red);
+  margin-bottom: 5px;
+}
+.play .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.play .tag {
+  border: 1px solid rgba(34, 28, 19, 0.6);
+  padding: 1px 7px;
+  font-size: 12px;
+}
+.conseq .warn {
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--red);
+  margin-top: 6px;
+}
+
+/* ------------------------------------------------------------ procedure cards */
+
+.play-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 14px;
+}
+.play-card {
+  border: 1px solid var(--ink);
+  background: var(--paper-light);
+  box-shadow: 3px 3px 0 rgba(34, 28, 19, 0.22);
+  padding: 10px 14px;
+}
+.card-title {
+  font-family: var(--font-title);
+  font-size: 17px;
+  letter-spacing: 1px;
+}
+.card-sub {
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--red);
+  margin-bottom: 6px;
+}
+.play .ask {
+  margin-top: 8px;
+  border: 1px dotted rgba(34, 28, 19, 0.5);
+  background: #efe6cf;
+  padding: 7px 10px;
+}
+.play .ask .eyebrow {
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.play .ask .q {
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.5;
+}
+.play .ask .after {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.play .banner {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 6px 10px;
+}
+.play .banner.spaced {
+  letter-spacing: 0.5px;
+}
+.play .banner.red {
+  background: var(--red);
+  color: var(--paper-light);
+}
+.play .motto {
+  margin-top: 8px;
+  font-family: var(--font-title);
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: var(--red);
+}
+.play .tags.agency {
+  margin: 6px 0;
+}
+.play .arcs {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.play .arcs b {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.play .arcs-note {
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 3px;
+}
