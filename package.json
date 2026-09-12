@@ -1,0 +1,27 @@
+{
+  "name": "blades_in_the_dark_vtt",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Doskvol Table: a shared virtual tabletop for one Blades in the Dark campaign",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit -p tsconfig.json && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "firebase": "11.10.0",
+    "preact": "10.29.8"
+  },
+  "devDependencies": {
+    "@types/node": "18.19.130",
+    "typescript": "5.9.3",
+    "vite": "6.4.3",
+    "vitest": "3.2.7"
+  }
+}

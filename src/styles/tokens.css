@@ -1,0 +1,29 @@
+/* "Ink Ledger" design tokens, from design/handoff/README.md */
+:root {
+  --paper: #e7dfc9;
+  --paper-light: #f2ead2;
+  --paper-hover: #fff6dd;
+  --clock-face: #f6efdb;
+  --ink: #221c13;
+  --red: #8c2f1b;
+  --red-hover: #a63a22;
+  --muted: #5c503b;
+  --faint: #9a8d70;
+  --sheet-rail: #ddd3b8;
+  --sheet-bar: #d8cfb5;
+  --sheet-bar-dark: #c9bd9d;
+  --hairline: rgba(34, 28, 19, 0.35);
+  --edge-green: #3f6a45;
+
+  --font-title: 'IM Fell English SC', 'IM Fell English', Georgia, serif;
+  --font-body: 'IM Fell English', Georgia, serif;
+  --font-mono: 'Courier Prime', 'Courier New', monospace;
+  --font-stencil: 'Big Shoulders Stencil Text', 'Big Shoulders Stencil Display', Impact, 'Arial Narrow', sans-serif;
+  --font-sheet: 'Crimson Pro', Georgia, serif;
+
+  --shadow-card: 4px 4px 0 rgba(34, 28, 19, 0.28);
+  --shadow-panel: 3px 3px 0 rgba(34, 28, 19, 0.18);
+  --shadow-panel-strong: 3px 3px 0 rgba(34, 28, 19, 0.35);
+  --shadow-dialog: 8px 8px 0 rgba(34, 28, 19, 0.35);
+  --dotted: 1px dotted rgba(34, 28, 19, 0.3);
+}

@@ -1,0 +1,423 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.35;
+  overflow: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: var(--paper-light);
+  border: 1px solid var(--ink);
+  padding: 4px 10px;
+}
+button:hover {
+  background: var(--paper-hover);
+}
+button.red {
+  background: var(--red);
+  color: var(--paper-light);
+  border-color: var(--ink);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+button.red:hover {
+  background: var(--red-hover);
+}
+button.ghost {
+  background: transparent;
+  border: 1px dashed var(--hairline);
+  opacity: 0.6;
+}
+button.ghost:hover {
+  opacity: 1;
+  background: transparent;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------ app frame */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.view {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+/* ------------------------------------------------------------ header */
+
+.hdr {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 46px;
+  padding: 8px 16px;
+  border-bottom: 4px double var(--ink);
+  background: var(--paper);
+  flex: none;
+}
+
+.hdr-crew {
+  font-family: var(--font-title);
+  font-size: 22px;
+  width: 240px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px dotted transparent;
+  padding: 0 2px;
+  outline: none;
+}
+.hdr-crew:hover,
+.hdr-crew:focus {
+  border-bottom-color: var(--hairline);
+}
+
+.tabs {
+  display: flex;
+}
+.tabs button {
+  font-family: var(--font-title);
+  font-size: 15px;
+  letter-spacing: 2px;
+  padding: 3px 14px;
+  border: 1px solid var(--ink);
+  margin-left: -1px;
+  background: var(--paper-light);
+}
+.tabs button:first-child {
+  margin-left: 0;
+}
+.tabs button.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.hdr-hint {
+  color: var(--red);
+  font-style: italic;
+  font-size: 14px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hdr-spacer {
+  flex: 1;
+}
+
+.hdr .fit {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 5px 10px;
+}
+.hdr .book {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 5px 12px;
+}
+
+.menu-btn {
+  width: 34px;
+  height: 30px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  padding: 0;
+}
+.menu-btn i {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: currentColor;
+}
+.menu-btn.alert {
+  background: var(--red);
+  color: var(--paper-light);
+}
+
+.menu-wrap {
+  position: relative;
+}
+.menu {
+  position: absolute;
+  right: 0;
+  top: 36px;
+  width: 280px;
+  background: var(--paper-light);
+  border: 1px solid var(--ink);
+  box-shadow: var(--shadow-panel-strong);
+  z-index: 50;
+  padding: 6px 0;
+}
+.menu .menu-head {
+  padding: 6px 14px 8px;
+  border-bottom: var(--dotted);
+  margin-bottom: 4px;
+}
+.menu .menu-head .label {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+}
+.menu .menu-head .status {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+.menu .menu-head .status.warn {
+  color: var(--red);
+}
+.menu button.row {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  padding: 7px 14px;
+  font-size: 15px;
+}
+.menu button.row:hover {
+  background: var(--paper-hover);
+}
+.menu button.row.red {
+  color: var(--red);
+  box-shadow: none;
+  background: transparent;
+}
+.menu .sep {
+  border-top: var(--dotted);
+  margin: 4px 0;
+}
+
+/* ------------------------------------------------------------ home + placeholders */
+
+.home {
+  height: 100%;
+  overflow: auto;
+  padding: 48px 24px;
+  display: flex;
+  justify-content: center;
+}
+.home-inner {
+  width: min(720px, 100%);
+}
+.home h1 {
+  font-family: var(--font-stencil);
+  font-weight: 800;
+  font-size: 56px;
+  line-height: 1;
+  margin: 0 0 6px;
+}
+.home .sub {
+  font-style: italic;
+  font-size: 17px;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.home .actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+.home .actions button {
+  padding: 8px 16px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+.home .section {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: var(--muted);
+  margin: 18px 0 8px;
+}
+.home .recent {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.home .recent li {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--ink);
+  background: var(--paper-light);
+  box-shadow: var(--shadow-panel);
+  margin-bottom: 8px;
+}
+.home .recent a {
+  font-family: var(--font-title);
+  font-size: 20px;
+  color: var(--ink);
+  text-decoration: none;
+  flex: 1;
+}
+.home .recent .when {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+.home .mode {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-top: 30px;
+}
+.home .attribution,
+.attribution {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 30px;
+  line-height: 1.4;
+}
+
+.placeholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  gap: 8px;
+}
+.placeholder h2 {
+  font-family: var(--font-stencil);
+  font-weight: 800;
+  font-size: 48px;
+  margin: 0;
+  color: var(--ink);
+}
+.placeholder p {
+  font-style: italic;
+  margin: 0;
+}
+
+.notfound {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.notfound .code {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------ dialogs */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(34, 28, 19, 0.35);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 8vh;
+  z-index: 100;
+}
+.dialog {
+  background: var(--paper-light);
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow-dialog);
+  width: min(600px, 94vw);
+  max-height: 84vh;
+  display: flex;
+  flex-direction: column;
+}
+.dialog .dlg-head {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 16px;
+  font-family: var(--font-stencil);
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+.dialog .dlg-body {
+  padding: 14px 16px;
+  overflow: auto;
+}
+.dialog .dlg-foot {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 10px 16px 14px;
+}
+.dialog textarea {
+  width: 100%;
+  min-height: 220px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 8px;
+  resize: vertical;
+}
+.dialog p.hint {
+  font-style: italic;
+  color: var(--muted);
+  margin: 0 0 10px;
+}

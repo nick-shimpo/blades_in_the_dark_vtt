@@ -1,0 +1,185 @@
+{
+ "app": "bitd-gm-cockpit",
+ "v": 1,
+ "savedAt": "2026-09-12T00:00:00.000Z",
+ "seq": 31,
+ "crew": {
+  "name": "The Widow's Lantern",
+  "meta": ""
+ },
+ "nodes": [
+  {
+   "id": "n1",
+   "name": "The Widow's Lantern",
+   "type": "crew",
+   "x": 2000,
+   "y": 1500,
+   "tier": "0",
+   "district": "Six Towers",
+   "blurb": "",
+   "wants": "a name that opens doors",
+   "details": "",
+   "moves": "",
+   "notes": "",
+   "status": 0,
+   "clocks": [],
+   "f": {
+    "crewType": "Shadows"
+   }
+  },
+  {
+   "id": "n2",
+   "name": "The Red Sashes",
+   "type": "faction",
+   "ref": "red-sashes",
+   "x": 2360,
+   "y": 1330,
+   "tier": "II",
+   "district": "Crow's Foot",
+   "blurb": "",
+   "wants": "their stolen ledger back",
+   "details": "",
+   "moves": "",
+   "notes": "",
+   "status": -2,
+   "clocks": [
+    {
+     "id": "c1",
+     "name": "Find the thieves",
+     "size": 6,
+     "filled": 2
+    }
+   ],
+   "f": {},
+   "bookClocksSeeded": true
+  },
+  {
+   "id": "n5",
+   "name": "Bazso Baz",
+   "type": "npc",
+   "ref": "bazso-baz",
+   "x": 1500,
+   "y": 1590,
+   "tier": "",
+   "district": "Crow's Foot",
+   "blurb": "",
+   "wants": "loyalty, cheap",
+   "details": "",
+   "moves": "",
+   "notes": "",
+   "status": 1,
+   "clocks": [],
+   "f": {}
+  }
+ ],
+ "edges": [
+  {
+   "id": "e1",
+   "from": "n2",
+   "to": "n1",
+   "label": "Hostile",
+   "note": ""
+  },
+  {
+   "id": "e4",
+   "from": "n5",
+   "to": "n1",
+   "label": "Uses",
+   "note": ""
+  }
+ ],
+ "sheets": {
+  "crew": {
+   "type": "shadows",
+   "reputation": "Subtle",
+   "lair": "a shuttered lamp-shop",
+   "lairDistrict": "Six Towers",
+   "groundsDistrict": "Crow's Foot",
+   "operation": "Burglary",
+   "deity": "",
+   "rep": 3,
+   "tier": 0,
+   "hold": "weak",
+   "heat": 2,
+   "wanted": 0,
+   "coin": 2,
+   "xp": 1,
+   "advances": 0,
+   "abilities": {
+    "everyone_steals": true
+   },
+   "upgrades": {
+    "training_prowess": 1,
+    "hidden_lair": 1
+   },
+   "cohorts": [],
+   "claims": {
+    "1,1": true
+   },
+   "contacts": {
+    "Rigney": "friend"
+   }
+  },
+  "chars": [
+   {
+    "id": "ch1",
+    "playbook": "lurk",
+    "name": "Cross",
+    "alias": "the Shade",
+    "look": "lean, hooded, quiet boots",
+    "heritage": "Akoros",
+    "heritageDetail": "dockside orphan",
+    "background": "Underworld",
+    "backgroundDetail": "ran with the Crows",
+    "vice": "Stupor",
+    "viceDetail": "the Leaky Bucket, back room",
+    "stress": 3,
+    "trauma": 0,
+    "traumaConds": [],
+    "harm": {
+     "1": [
+      "Battered",
+      ""
+     ],
+     "2": [
+      "",
+      ""
+     ],
+     "3": [
+      ""
+     ]
+    },
+    "healing": 1,
+    "armor": {},
+    "abilities": {
+     "infiltrator": true
+    },
+    "veteran": [],
+    "xp": {
+     "playbook": 2,
+     "prowess": 1
+    },
+    "advances": {},
+    "actions": {
+     "prowl": 2,
+     "finesse": 1,
+     "survey": 2,
+     "tinker": 1,
+     "skirmish": 1
+    },
+    "load": "light",
+    "items": {
+     "fine_lockpicks": true,
+     "a_blade_or_two": true,
+     "burglary_gear": true
+    },
+    "coin": 1,
+    "stash": 4,
+    "friends": {
+     "Telda": "friend",
+     "Darmot": "rival"
+    }
+   }
+  ]
+ }
+}

@@ -1,0 +1,17 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "campaigns": {
+      "$id": {
+        ".read": "$id.matches(/^[a-z0-9]{12,40}$/)",
+        ".write": "$id.matches(/^[a-z0-9]{12,40}$/)",
+        "rolls": {
+          "$rollId": {
+            ".validate": "newData.hasChildren(['at', 'dice', 'pool', 'result'])"
+          }
+        }
+      }
+    }
+  }
+}
