@@ -34,7 +34,7 @@ export function Clock({ size, filled, diameter = 58, onTick, title, class: cls, 
         padding: 0,
         flex: 'none',
         background: `${dividers}, ${face}`,
-        boxShadow: full ? '0 0 0 3px rgba(140,47,27,0.35)' : 'none',
+        boxShadow: full ? '0 0 0 3px rgba(140,47,27,0.35)' : '1px 1px 0 rgba(34,28,19,0.25)',
         cursor: onTick ? 'pointer' : 'default',
         ...style,
       }}

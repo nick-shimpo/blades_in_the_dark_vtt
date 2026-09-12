@@ -625,7 +625,7 @@ export function oneLine(node: TableNode, crewTypeName?: string): string {
         const faction = e.entry.faction_ids[0] ? bookEntry('faction', e.entry.faction_ids[0]) : undefined;
         const fname = faction?.kind === 'faction' ? faction.entry.name : '';
         line = [role, fname].filter(Boolean).join(' · ') || firstSentence(e.entry.description);
-      } else line = node.f.role || '';
+      } else line = node.f.roles || node.f.role || '';
       break;
     }
     case 'location': {
