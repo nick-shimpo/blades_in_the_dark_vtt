@@ -5,6 +5,8 @@ import { blankLedger, exportLedger, importLedger } from './ledger/normalize';
 import type { Ledger, RollRecord } from './ledger/types';
 import { createStore, firebaseAvailable, forgetCampaign, recentCampaigns, rememberCampaign, type Store, type StoreStatus } from './sync';
 import { LedgerContext, makeLedgerApi, useLedger, VIEWS, type ViewId } from './ui/context';
+import { BOOK_EVENT, FIT_EVENT, HINT_EVENT, isTyping, setHint } from './ui/events';
+import { RollTicker } from './ui/RollTicker';
 import { campaignLink, hrefFor, navigate, useRoute } from './ui/route';
 import { PlayView } from './views/play';
 import { SheetsView } from './views/sheets';
@@ -104,8 +106,7 @@ function Campaign({ campaignId, view }: { campaignId: string; view: ViewId }) {
   // keys 1–4 switch views when not typing
   useEffect(() => {
     const on = (e: KeyboardEvent) => {
-      const t = e.target as HTMLElement | null;
-      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+      if (isTyping(e.target)) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const v = VIEWS.find((x) => x.key === e.key);
       if (v) navigate(campaignId, v.id);
@@ -159,20 +160,13 @@ function Campaign({ campaignId, view }: { campaignId: string; view: ViewId }) {
           {view === 'sparks' && <SparksView />}
           {view === 'play' && <PlayView />}
         </div>
+        <RollTicker />
       </div>
     </LedgerContext.Provider>
   );
 }
 
 // ---------------------------------------------------------------- header
-
-/** Views can publish a transient red hint and react to FIT / BOOK through these events. */
-export const HINT_EVENT = 'doskvol:hint';
-export const FIT_EVENT = 'doskvol:fit';
-export const BOOK_EVENT = 'doskvol:book';
-export function setHint(text: string) {
-  window.dispatchEvent(new CustomEvent(HINT_EVENT, { detail: text }));
-}
 
 function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
   const { ledger, update, status } = useLedger();
