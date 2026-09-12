@@ -1,0 +1,1300 @@
+/* Sheets view — design/handoff/README.md "Sheets". Tokens from src/styles/tokens.css. */
+
+.sheets {
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  font-family: var(--font-sheet);
+  font-size: 15px;
+  color: var(--ink);
+}
+.sheets b {
+  font-weight: 700;
+}
+.sh-spacer {
+  flex: 1;
+}
+
+/* ------------------------------------------------------------ rail */
+
+.sh-rail {
+  width: 216px;
+  flex: none;
+  border-right: 1px solid var(--ink);
+  background: var(--sheet-rail);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  gap: 6px;
+  padding-bottom: 12px;
+}
+.sh-rail-label {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 3px;
+  padding: 12px 14px 2px;
+  color: var(--muted);
+}
+.sh-card {
+  text-align: left;
+  margin: 0 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--ink);
+  background: var(--paper-light);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.sh-card:hover {
+  background: var(--paper-hover);
+}
+.sh-card.is-on,
+.sh-card.is-on:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.sh-card-name {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1;
+  letter-spacing: 0.5px;
+}
+.sh-card-sub {
+  font-size: 13px;
+  font-style: italic;
+  opacity: 0.8;
+}
+.sh-new {
+  margin: 4px 10px 0;
+  padding: 8px 12px;
+  border: 1px dashed var(--ink);
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+.sh-new:hover {
+  background: var(--paper-light);
+}
+.sh-rail-spacer {
+  flex: 1;
+}
+.sh-rail-attrib {
+  padding: 10px 14px 0;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.sh-main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ------------------------------------------------------------ empty state, pickers */
+
+.sh-empty {
+  padding: 60px 40px;
+  max-width: 520px;
+}
+.sh-empty h2 {
+  font-family: var(--font-stencil);
+  font-weight: 800;
+  font-size: 48px;
+  line-height: 1;
+  margin: 0;
+}
+.sh-empty p {
+  font-size: 17px;
+  font-style: italic;
+  color: var(--muted);
+  margin: 8px 0 0;
+  text-wrap: pretty;
+}
+.sh-picker {
+  padding: 30px 26px 40px;
+}
+.sh-picker h2 {
+  font-family: var(--font-stencil);
+  font-weight: 800;
+  font-size: 44px;
+  line-height: 1;
+  margin: 0;
+}
+.sh-picker .sub {
+  font-style: italic;
+  color: var(--muted);
+  margin: 4px 0 18px;
+  font-size: 16px;
+}
+.sh-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 14px;
+}
+.sh-picker-grid.wide {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+.sh-pick {
+  text-align: left;
+  border: 1px solid var(--ink);
+  background: var(--paper-light);
+  color: var(--ink);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 3px 3px 0 rgba(34, 28, 19, 0.25);
+  font-family: inherit;
+}
+.sh-pick:hover {
+  background: var(--paper-hover);
+}
+.sh-pick-name {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1;
+}
+.sh-pick-tag {
+  font-style: italic;
+  font-size: 16px;
+}
+.sh-pick-desc {
+  font-size: 14px;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.sh-pick-xp {
+  font-size: 13.5px;
+  text-wrap: pretty;
+}
+.sh-cancel {
+  margin-top: 18px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  padding: 6px 14px;
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+/* ------------------------------------------------------------ band + tracker strip */
+
+.sh-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.sh-band {
+  position: relative;
+  z-index: 1;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px 26px 22px;
+  display: flex;
+  align-items: flex-end;
+  gap: 22px;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 86%,
+    96% 100%,
+    93% 89%,
+    88% 97%,
+    82% 90%,
+    76% 99%,
+    70% 91%,
+    63% 98%,
+    57% 89%,
+    50% 97%,
+    44% 90%,
+    37% 99%,
+    31% 91%,
+    25% 97%,
+    19% 89%,
+    13% 98%,
+    8% 91%,
+    3% 99%,
+    0 90%
+  );
+}
+.sh-band-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sh-band-row {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+}
+.sh-band input {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px dashed rgba(231, 223, 201, 0.3);
+  padding: 0 0 2px;
+  color: var(--paper);
+  outline: none;
+  font-family: var(--font-sheet);
+}
+.sh-band input::placeholder {
+  color: rgba(231, 223, 201, 0.45);
+}
+.sh-band input:focus {
+  border-bottom-color: rgba(231, 223, 201, 0.7);
+}
+.sh-band input.sh-name {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 1;
+  letter-spacing: 1px;
+  width: min(420px, 46%);
+}
+.sh-band input.sh-name.crew {
+  width: min(520px, 70%);
+}
+.sh-band input.sh-alias {
+  font-style: italic;
+  font-size: 20px;
+  width: 180px;
+}
+.sh-band input.sh-look {
+  font-size: 16px;
+  width: min(620px, 90%);
+}
+.sh-band-blurb {
+  font-size: 15px;
+  font-style: italic;
+  opacity: 0.85;
+  text-wrap: pretty;
+}
+.sh-band-side {
+  text-align: right;
+  flex: none;
+  padding-bottom: 4px;
+}
+.sh-band-kicker {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 3px;
+  opacity: 0.7;
+}
+.sh-band-type {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 38px;
+  line-height: 1;
+}
+.sh-band-tag {
+  font-style: italic;
+  font-size: 14.5px;
+  opacity: 0.85;
+}
+
+.sh-strip {
+  background: var(--paper-light);
+  border-bottom: 2px solid var(--ink);
+  padding: 10px 26px 12px;
+  display: flex;
+  gap: 26px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-top: -8px;
+}
+.sh-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.sh-group-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 15px;
+}
+.sh-group-body {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.sh-label {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 2.5px;
+}
+.sh-label.small {
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+.sh-label.muted {
+  color: var(--muted);
+}
+.sh-label.red {
+  color: var(--red);
+}
+.sh-count {
+  font-size: 13px;
+  color: var(--muted);
+}
+.sh-count.is-over {
+  color: var(--red);
+}
+.sh-hint {
+  font-size: 13px;
+  color: var(--red);
+  font-style: italic;
+}
+.sh-gap10 {
+  width: 10px;
+  flex: none;
+}
+.sh-tag {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+/* ------------------------------------------------------------ boxes, chips, segmented, selects */
+
+.sh-box {
+  border: 1.5px solid var(--ink);
+  background: transparent;
+  padding: 0;
+  flex: none;
+  display: inline-block;
+}
+.sh-box:hover {
+  background: rgba(34, 28, 19, 0.12);
+}
+.sh-box.is-on,
+.sh-box.is-on:hover {
+  background: var(--ink);
+}
+.sh-box.is-round {
+  border-radius: 50%;
+}
+.sh-box.is-red {
+  border-color: var(--red);
+}
+.sh-box.is-red.is-on,
+.sh-box.is-red.is-on:hover {
+  background: var(--red);
+}
+.sh-box.is-inverse {
+  border-color: rgba(231, 223, 201, 0.85);
+}
+.sh-box.is-inverse:hover {
+  background: rgba(231, 223, 201, 0.2);
+}
+.sh-box.is-inverse.is-on,
+.sh-box.is-inverse.is-on:hover {
+  background: var(--paper);
+}
+.sh-box.is-dashed,
+.sh-box.is-dashed:hover {
+  border-style: dashed;
+  border-color: var(--faint);
+  background: transparent;
+  cursor: not-allowed;
+}
+
+.sh-chip {
+  font-family: var(--font-sheet);
+  font-size: 13.5px;
+  line-height: 18px;
+  padding: 2px 8px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+}
+.sh-chip:hover {
+  background: var(--paper-hover);
+}
+.sh-chip.is-on,
+.sh-chip.is-on:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.sh-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.sh-seg {
+  display: flex;
+}
+.sh-seg button {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  padding: 5px 9px;
+  border: 1px solid var(--ink);
+  margin-left: -1px;
+  background: transparent;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.sh-seg button:first-child {
+  margin-left: 0;
+}
+.sh-seg button:hover {
+  background: var(--paper-hover);
+}
+.sh-seg button.is-on,
+.sh-seg button.is-on:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.sh-select {
+  border: 1px solid var(--ink);
+  background: var(--paper-light);
+  color: var(--ink);
+  font-family: var(--font-sheet);
+  font-size: 14px;
+  padding: 2px 4px;
+}
+.sh-select.grow {
+  flex: 1;
+  min-width: 140px;
+}
+
+.sh-btn {
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  padding: 3px 9px;
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+}
+.sh-btn:hover {
+  background: var(--paper);
+}
+.sh-badge {
+  background: var(--red);
+  color: var(--paper-light);
+  border: 0;
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  padding: 3px 7px;
+  white-space: nowrap;
+}
+.sh-badge:hover {
+  background: var(--red-hover);
+}
+.sh-badge.big {
+  font-size: 10.5px;
+  padding: 4px 8px;
+  margin-left: 8px;
+}
+.sh-x {
+  border: 0;
+  background: transparent;
+  color: var(--red);
+  font-size: 12px;
+  padding: 0 2px;
+  align-self: flex-start;
+  line-height: 1.4;
+}
+.sh-x:hover {
+  background: transparent;
+  color: var(--red-hover);
+}
+.sh-danger {
+  align-self: flex-start;
+  border: 1px solid var(--red);
+  background: transparent;
+  color: var(--red);
+  padding: 5px 12px;
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+}
+.sh-danger:hover {
+  background: rgba(140, 47, 27, 0.08);
+}
+.sh-danger.is-armed,
+.sh-danger.is-armed:hover {
+  background: var(--red);
+  color: var(--paper-light);
+}
+
+/* the crew coin tracker wraps at 8 / 16 boxes */
+.track.wrap {
+  flex-wrap: wrap;
+  max-width: 200px;
+}
+
+/* ------------------------------------------------------------ armor, trauma */
+
+.sh-armor {
+  display: flex;
+  gap: 8px;
+}
+.sh-armor-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.sh-armor-cell span {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+}
+.sh-armor-cell.is-off span {
+  color: var(--faint);
+}
+.sh-restore {
+  border: 0;
+  background: transparent;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  padding: 0;
+}
+.sh-restore:hover {
+  color: var(--red);
+  background: transparent;
+}
+.sh-trauma-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-left: 10px;
+  max-width: 360px;
+}
+
+/* ------------------------------------------------------------ body, panels, bars */
+
+.sh-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+  padding: 20px 26px 48px;
+  align-items: start;
+}
+.sh-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+.sh-panel {
+  border: 1px solid var(--ink);
+  background: var(--paper-light);
+  box-shadow: var(--shadow-panel);
+}
+.sh-panel.rail {
+  background: var(--sheet-rail);
+}
+.sh-bar {
+  background: var(--sheet-bar);
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 2.5px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sh-bar.dark {
+  background: var(--sheet-bar-dark);
+}
+.sh-bar.ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+.sh-bar-note {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+.sh-bar.ink .sh-bar-note {
+  color: inherit;
+  opacity: 0.65;
+}
+.sh-bar-note.is-over {
+  color: var(--red);
+}
+
+/* ------------------------------------------------------------ harm */
+
+.sh-harm {
+  display: flex;
+  gap: 14px;
+  padding: 10px;
+  align-items: stretch;
+}
+.sh-harm-grid {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 90px;
+  border: 1px solid var(--ink);
+  border-bottom: 0;
+}
+.sh-harm-level {
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  border-right: 1px solid var(--ink);
+  background: transparent;
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 22px;
+  padding: 0;
+  color: var(--ink);
+}
+.sh-harm-level:hover {
+  background: var(--red);
+  color: var(--paper-light);
+}
+.sh-harm-cells {
+  display: flex;
+  border-bottom: 1px solid var(--ink);
+  min-width: 0;
+}
+.sh-harm-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  border-right: 1px solid var(--hairline);
+  background: transparent;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 17px;
+  padding: 9px 8px;
+  color: var(--ink);
+  outline: none;
+}
+.sh-harm-input::placeholder {
+  color: var(--faint);
+}
+.sh-harm-input:focus {
+  background: rgba(255, 250, 235, 0.6);
+}
+.sh-harm-pen {
+  border-bottom: 1px solid var(--ink);
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--sheet-bar);
+  padding: 0 4px;
+}
+.sh-heal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: none;
+}
+.sh-fatal {
+  background: var(--red);
+  color: var(--paper-light);
+  padding: 6px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 14.5px;
+}
+.sh-fatal button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 14px;
+  padding: 0;
+}
+.sh-fatal button:hover {
+  background: transparent;
+}
+
+/* ------------------------------------------------------------ attributes, actions */
+
+.sh-bar.sh-attr-bar {
+  padding: 4px 10px;
+}
+.sh-attr-rating {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1;
+  background: transparent;
+  border: 1px solid rgba(231, 223, 201, 0.45);
+  color: var(--paper);
+  padding: 1px 9px;
+}
+.sh-attr-rating:hover {
+  background: var(--red);
+  border-color: var(--red);
+}
+.sh-xp {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.sh-xp-label {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  opacity: 0.7;
+  margin-right: 4px;
+}
+.sh-actions {
+  display: flex;
+  flex-direction: column;
+}
+.sh-action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 10px;
+  border-bottom: var(--dotted);
+}
+.sh-action-name {
+  flex: 1;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  font-family: var(--font-sheet);
+  font-size: 17px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 2px 4px;
+  color: var(--ink);
+}
+.sh-action-name:hover {
+  color: var(--red);
+  background: transparent;
+}
+.sh-pool {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--red);
+}
+.sh-bonus {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.4;
+  padding: 0 4px;
+  text-wrap: pretty;
+}
+.sh-bonus b {
+  color: var(--ink);
+}
+
+/* ------------------------------------------------------------ abilities, xp text, friends */
+
+.sh-ability {
+  display: flex;
+  gap: 10px;
+  padding: 8px 10px;
+  border-bottom: 1px dotted rgba(34, 28, 19, 0.35);
+}
+.sh-ability.is-on {
+  background: rgba(255, 250, 235, 0.6);
+}
+.sh-ability-body {
+  flex: 1;
+  min-width: 0;
+}
+.sh-ability-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sh-ability-name {
+  font-weight: 700;
+  font-size: 16px;
+}
+.sh-ability-from {
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  color: var(--red);
+}
+.sh-ability-text {
+  font-size: 14px;
+  line-height: 1.35;
+  color: #3a3126;
+  text-wrap: pretty;
+}
+.sh-ability-note {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 2px;
+  text-wrap: pretty;
+}
+.sh-vet {
+  padding: 8px 10px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.sh-xp-text {
+  padding: 8px 12px 10px;
+  font-size: 14.5px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-wrap: pretty;
+}
+.sh-xp-text.small {
+  padding: 0 10px 10px;
+  font-size: 13.5px;
+}
+.sh-bullet {
+  padding-left: 12px;
+}
+.sh-friend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-bottom: var(--dotted);
+}
+.sh-friend-name {
+  font-weight: 700;
+  font-size: 16px;
+}
+.sh-friend-role {
+  font-size: 14.5px;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------ items, upgrades, stash, identity */
+
+.sh-items {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0 14px;
+  padding: 6px 10px 8px;
+}
+.sh-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 0;
+  border-bottom: 1px dotted rgba(34, 28, 19, 0.25);
+  min-width: 0;
+}
+.sh-item-boxes {
+  display: flex;
+  gap: 2px;
+  flex: none;
+}
+.sh-item-name {
+  font-size: 15px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sh-item-name.is-pb {
+  font-weight: 700;
+}
+.sh-item-name.is-free {
+  font-style: italic;
+}
+.sh-stash {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.sh-stash-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.sh-stash-n {
+  font-size: 12px;
+  color: var(--muted);
+  margin-left: 8px;
+}
+.sh-stash-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+.sh-identity {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sh-id-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.sh-detail {
+  border: 0;
+  border-bottom: 1px dashed rgba(34, 28, 19, 0.4);
+  background: transparent;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 15.5px;
+  padding: 2px 0;
+  color: var(--ink);
+  width: 100%;
+  outline: none;
+}
+.sh-detail::placeholder {
+  color: var(--faint);
+}
+.sh-detail:focus {
+  border-bottom-color: var(--ink);
+}
+
+/* ------------------------------------------------------------ crew: tier, claims, lair */
+
+.sh-tier {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+.sh-tier-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.sh-tier-cell span {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 11px;
+}
+.sh-seg.sh-hold {
+  margin-left: 10px;
+}
+
+.sh-claims {
+  padding: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 14px minmax(0, 1fr) 14px minmax(0, 1fr) 14px minmax(0, 1fr) 14px minmax(0, 1fr);
+  grid-template-rows: 62px 14px 62px 14px 62px;
+}
+.sh-conn {
+  background: var(--sheet-bar-dark);
+}
+.sh-conn.is-on {
+  background: var(--ink);
+}
+.sh-tile {
+  border: 1px solid var(--ink);
+  background: var(--sheet-bar);
+  color: var(--ink);
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1px;
+  line-height: 1.15;
+  padding: 4px;
+  text-align: center;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.sh-tile:hover {
+  background: var(--paper-hover);
+}
+.sh-tile.is-held,
+.sh-tile.is-held:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.sh-tile.is-lair,
+.sh-tile.is-lair:hover {
+  background: var(--muted);
+  color: var(--paper);
+  cursor: default;
+}
+.sh-tile.is-off {
+  border: 1px dashed var(--red);
+}
+.sh-tile.is-focus {
+  outline: 2px solid var(--red);
+  outline-offset: -3px;
+}
+.sh-claim-info {
+  padding: 0 12px 12px;
+  font-size: 14.5px;
+  line-height: 1.4;
+  min-height: 44px;
+  text-wrap: pretty;
+}
+.sh-claim-name {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  margin-right: 6px;
+}
+.sh-lair {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sh-lair-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.sh-lair-row .sh-detail {
+  flex: 1;
+  min-width: 160px;
+  width: auto;
+}
+.sh-note {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------------ crew: cohorts */
+
+.sh-empty-note {
+  padding: 10px;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--muted);
+}
+.sh-cohort {
+  padding: 10px;
+  border-bottom: 1px solid var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sh-cohort:last-child {
+  border-bottom: 0;
+}
+.sh-cohort-head {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.sh-cohort-name {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  border-bottom: 1px dashed rgba(34, 28, 19, 0.4);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 16px;
+  padding: 2px 0;
+  color: var(--ink);
+  outline: none;
+}
+.sh-cohort-name::placeholder {
+  color: var(--faint);
+}
+.sh-cohort-stat {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  flex: none;
+}
+.sh-cohort-traits {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.sh-cohort-trait {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.sh-cohort-trait .sh-tag,
+.sh-cohort-harm .sh-tag {
+  letter-spacing: 1.5px;
+  margin-right: 3px;
+}
+.sh-cohort-harm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.sh-cohort-harm-name {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-right: 8px;
+}
+
+/* ------------------------------------------------------------ roll dialog */
+
+.dialog.sh-roll {
+  font-family: var(--font-sheet);
+}
+.sh-roll .dlg-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  letter-spacing: 0;
+}
+.sh-roll-title {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+.sh-roll-who {
+  font-family: var(--font-sheet);
+  font-style: italic;
+  font-weight: 400;
+  opacity: 0.85;
+  font-size: 15px;
+}
+.sh-roll-x {
+  border: 0;
+  background: transparent;
+  color: var(--paper);
+  font-size: 16px;
+  padding: 0;
+  font-family: var(--font-sheet);
+  font-weight: 400;
+}
+.sh-roll-x:hover {
+  background: transparent;
+  color: var(--paper-hover);
+}
+.sh-roll .dlg-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px 16px;
+}
+.sh-roll-grid {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  gap: 10px 12px;
+  align-items: center;
+}
+.sh-roll-bonus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.sh-roll-resist {
+  font-size: 15.5px;
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+.sh-roll-pool {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-top: 1px solid var(--hairline);
+  padding-top: 12px;
+}
+.sh-roll-pool-n {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1;
+}
+.sh-roll-pool-note {
+  font-size: 13.5px;
+  color: var(--muted);
+  flex: 1;
+  line-height: 1.35;
+}
+.sh-roll-go {
+  border: 1px solid var(--ink);
+  background: var(--red);
+  color: var(--paper-light);
+  padding: 10px 22px;
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 3px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.sh-roll-go:hover {
+  background: var(--red-hover);
+}
+.sh-dice {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.sh-die {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--ink);
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 26px;
+  background: var(--clock-face);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 rgba(34, 28, 19, 0.25);
+}
+.sh-die.is-six {
+  background: var(--red);
+  color: var(--paper-light);
+}
+.sh-roll-label {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1;
+}
+.sh-roll-label.is-bad {
+  color: var(--red);
+}
+.sh-roll-text {
+  font-size: 15.5px;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+.sh-roll-applied {
+  font-size: 13.5px;
+  color: var(--red);
+}
