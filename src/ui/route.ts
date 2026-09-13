@@ -12,7 +12,7 @@ export function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean);
   if (parts[0] === 'c' && parts[1] && CAMPAIGN_ID_RE.test(parts[1])) {
     const v = parts[2];
-    const view: ViewId = v === 'sheets' || v === 'sparks' || v === 'play' ? v : 'table';
+    const view: ViewId = v === 'sheets' || v === 'sparks' || v === 'play' || v === 'scene' ? v : 'table';
     return { campaignId: parts[1], view };
   }
   return { campaignId: null, view: 'table' };

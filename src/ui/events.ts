@@ -4,6 +4,10 @@ import { useEffect } from 'preact/hooks';
 export const HINT_EVENT = 'doskvol:hint';
 export const FIT_EVENT = 'doskvol:fit';
 export const BOOK_EVENT = 'doskvol:book';
+/** Header SWEEP button pressed (Scene view). The Scene owns the two-step arming and clears on the second press. */
+export const SWEEP_EVENT = 'doskvol:sweep';
+/** Scene → header: `detail` is true while the sweep is armed, so the button can take the red treatment. */
+export const SWEEP_STATE_EVENT = 'doskvol:sweep-state';
 
 export function setHint(text: string): void {
   window.dispatchEvent(new CustomEvent(HINT_EVENT, { detail: text }));

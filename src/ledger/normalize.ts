@@ -18,6 +18,9 @@ import type {
   LedgerFileV1,
   NodeType,
   Relation,
+  Scene,
+  SceneCardType,
+  SceneItem,
   TableNode,
 } from './types';
 
@@ -173,6 +176,7 @@ export function blankLedger(crewName = 'Unnamed Crew'): Ledger {
     nodes: { [crewNode.id]: crewNode },
     edges: {},
     sheets: { crew: blankCrewSheet(), chars: {} },
+    scene: { items: {} },
   };
 }
 
@@ -370,6 +374,42 @@ export function normalizeCharacter(raw: unknown): CharacterSheet | null {
   };
 }
 
+// ---------------------------------------------------------------- scene
+
+const SCENE_CARD_TYPES: SceneCardType[] = ['npc', 'location', 'other'];
+
+export function normalizeSceneItem(raw: unknown, fallbackId?: string): SceneItem | null {
+  const it = obj(raw);
+  const id = str(it.id, fallbackId ?? '');
+  if (!id) return null;
+  const base = {
+    id,
+    x: Math.round(num(it.x, 0)),
+    y: Math.round(num(it.y, 0)),
+    createdAt: num(it.createdAt, 0) || Date.now(),
+  };
+  if (it.kind === 'clock') {
+    const size = num(it.size, 6);
+    const okSize = [4, 6, 8, 10, 12].includes(size) ? size : 6;
+    return { ...base, kind: 'clock', name: str(it.name, 'New clock'), size: okSize, filled: Math.max(0, Math.min(okSize, num(it.filled, 0))) };
+  }
+  if (it.kind === 'card') {
+    const type = SCENE_CARD_TYPES.includes(str(it.type) as SceneCardType) ? (str(it.type) as SceneCardType) : 'other';
+    return { ...base, kind: 'card', type, title: str(it.title), body: str(it.body) };
+  }
+  return null; // unknown kinds (e.g. handouts from an older design) are dropped
+}
+
+export function normalizeScene(raw: unknown): Scene {
+  const sc = obj(raw);
+  const items: Record<string, SceneItem> = {};
+  const list = Array.isArray(sc.items)
+    ? (sc.items as unknown[]).map((x, i) => normalizeSceneItem(x, `s${i}`))
+    : Object.entries(obj(sc.items)).map(([k, x]) => normalizeSceneItem(x, k));
+  for (const it of list) if (it) items[it.id] = it;
+  return { items };
+}
+
 // ---------------------------------------------------------------- whole ledger
 
 export function isLedgerLike(x: unknown): boolean {
@@ -413,6 +453,7 @@ export function normalizeLedger(raw: unknown): Ledger {
     nodes,
     edges,
     sheets: { crew: normalizeCrewSheet(sheetsRaw.crew), chars },
+    scene: normalizeScene(r.scene),
   };
   if (typeof r.savedAt === 'string') ledger.savedAt = r.savedAt;
   return ledger;
@@ -454,6 +495,7 @@ export function exportLedger(ledger: Ledger): LedgerFileV1 {
     nodes,
     edges,
     sheets: { crew, chars },
+    scene: { items: Object.values(ledger.scene.items).sort((a, b) => a.createdAt - b.createdAt) },
   };
 }
 

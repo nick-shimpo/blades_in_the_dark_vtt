@@ -47,10 +47,11 @@ export function makeLedgerApi(base: Omit<LedgerApi, 'saveChar' | 'saveCrew' | 's
   };
 }
 
-export type ViewId = 'table' | 'sparks' | 'play' | 'sheets';
+export type ViewId = 'table' | 'scene' | 'sparks' | 'play' | 'sheets';
 export const VIEWS: { id: ViewId; label: string; key: string }[] = [
   { id: 'table', label: 'Table', key: '1' },
-  { id: 'sparks', label: 'Sparks', key: '2' },
-  { id: 'play', label: 'Play', key: '3' },
-  { id: 'sheets', label: 'Sheets', key: '4' },
+  { id: 'scene', label: 'Scene', key: '2' },
+  { id: 'sparks', label: 'Sparks', key: '3' },
+  { id: 'play', label: 'Play', key: '4' },
+  { id: 'sheets', label: 'Sheets', key: '5' },
 ];

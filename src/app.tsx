@@ -5,10 +5,11 @@ import { blankLedger, exportLedger, importLedger } from './ledger/normalize';
 import type { Ledger, RollRecord } from './ledger/types';
 import { createStore, firebaseAvailable, forgetCampaign, recentCampaigns, rememberCampaign, type Store, type StoreStatus } from './sync';
 import { LedgerContext, makeLedgerApi, useLedger, VIEWS, type ViewId } from './ui/context';
-import { BOOK_EVENT, FIT_EVENT, HINT_EVENT, isTyping, setHint } from './ui/events';
+import { BOOK_EVENT, FIT_EVENT, HINT_EVENT, SWEEP_EVENT, SWEEP_STATE_EVENT, isTyping, setHint } from './ui/events';
 import { RollTicker } from './ui/RollTicker';
 import { campaignLink, hrefFor, navigate, useRoute } from './ui/route';
 import { PlayView } from './views/play';
+import { SceneView } from './views/scene';
 import { SheetsView } from './views/sheets';
 import { SparksView } from './views/sparks';
 import { TableView } from './views/table';
@@ -156,6 +157,7 @@ function Campaign({ campaignId, view }: { campaignId: string; view: ViewId }) {
         <Header campaignId={campaignId} view={view} />
         <div class="view">
           {view === 'table' && <TableView />}
+          {view === 'scene' && <SceneView />}
           {view === 'sheets' && <SheetsView />}
           {view === 'sparks' && <SparksView />}
           {view === 'play' && <PlayView />}
@@ -174,12 +176,19 @@ function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
   const [menu, setMenu] = useState(false);
   const [paste, setPaste] = useState(false);
   const [confirmNew, setConfirmNew] = useState(false);
+  const [sweepArmed, setSweepArmed] = useState(false);
 
   useEffect(() => {
     const on = (e: Event) => setHintState((e as CustomEvent<string>).detail ?? '');
+    const onSweep = (e: Event) => setSweepArmed(!!(e as CustomEvent<boolean>).detail);
     window.addEventListener(HINT_EVENT, on);
-    return () => window.removeEventListener(HINT_EVENT, on);
+    window.addEventListener(SWEEP_STATE_EVENT, onSweep);
+    return () => {
+      window.removeEventListener(HINT_EVENT, on);
+      window.removeEventListener(SWEEP_STATE_EVENT, onSweep);
+    };
   }, []);
+  useEffect(() => setSweepArmed(false), [view]);
 
   const exportCopy = useCallback(() => {
     const json = JSON.stringify(exportLedger(ledger), null, 2);
@@ -233,6 +242,11 @@ function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
       </nav>
       <div class="hdr-hint">{hint}</div>
       <div class="hdr-spacer" />
+      {view === 'scene' && (
+        <button class={sweepArmed ? 'red book' : 'fit'} title="clear the scene" onClick={() => window.dispatchEvent(new CustomEvent(SWEEP_EVENT))}>
+          SWEEP
+        </button>
+      )}
       {view === 'table' && (
         <>
           <button class="fit" onClick={() => window.dispatchEvent(new CustomEvent(FIT_EVENT))}>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Courier+Prime:wght@700&family=Big+Shoulders+Stencil+Text:wght@700;800&family=Big+Shoulders+Stencil+Display:wght@700;800&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:#e7dfc9;color:#221c13;font-family:'IM Fell English',Georgia,serif;font-size:15px;line-height:1.35;overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+input::placeholder,textarea::placeholder{color:#9a8d70;opacity:1}
+a{color:#221c13}a:hover{color:#8c2f1b}
+</style>
+</helmet>
+<div data-screen-label="Scene" style="display:flex;flex-direction:column;height:100vh;background:#e7dfc9;color:#221c13">
+  <header style="display:flex;align-items:center;gap:14px;height:46px;padding:8px 16px;border-bottom:4px double #221c13;background:#e7dfc9;flex:none">
+    <input defaultValue="The Widow's Lantern" placeholder="Crew name" spellCheck="false" style="font-family:'IM Fell English SC','IM Fell English',Georgia,serif;font-size:22px;width:240px;background:transparent;border:0;border-bottom:1px dotted transparent;padding:0 2px;outline:none;color:#221c13" style-hover="border-bottom-color:rgba(34,28,19,0.35)" style-focus="border-bottom-color:rgba(34,28,19,0.35)">
+    <nav style="display:flex">
+      <button type="button" title="key 1" style="font-family:'IM Fell English SC','IM Fell English',Georgia,serif;font-size:15px;letter-spacing:2px;padding:3px 14px;border:1px solid #221c13;margin-left:0;background:#f2ead2;color:#221c13;cursor:pointer" style-hover="background:#fff6dd">Table</button>
+      <button type="button" title="key 2" style="font-family:'IM Fell English SC','IM Fell English',Georgia,serif;font-size:15px;letter-spacing:2px;padding:3px 14px;border:1px solid #221c13;margin-left:-1px;background:#221c13;color:#e7dfc9;cursor:pointer">Scene</button>
+      <button type="button" title="key 3" style="font-family:'IM Fell English SC','IM Fell English',Georgia,serif;font-size:15px;letter-spacing:2px;padding:3px 14px;border:1px solid #221c13;margin-left:-1px;background:#f2ead2;color:#221c13;cursor:pointer" style-hover="background:#fff6dd">Sparks</button>
+      <button type="button" title="key 4" style="font-family:'IM Fell English SC','IM Fell English',Georgia,serif;font-size:15px;letter-spacing:2px;padding:3px 14px;border:1px solid #221c13;margin-left:-1px;background:#f2ead2;color:#221c13;cursor:pointer" style-hover="background:#fff6dd">Play</button>
+      <button type="button" title="key 5" style="font-family:'IM Fell English SC','IM Fell English',Georgia,serif;font-size:15px;letter-spacing:2px;padding:3px 14px;border:1px solid #221c13;margin-left:-1px;background:#f2ead2;color:#221c13;cursor:pointer" style-hover="background:#fff6dd">Sheets</button>
+    </nav>
+    <div style="color:#8c2f1b;font-style:italic;font-size:14px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ hint }}</div>
+    <div style="flex:1"></div>
+    <sc-if value="{{ sweepIdle }}" hint-placeholder-val="{{ true }}">
+      <button type="button" title="clear the scene (two clicks)" style="font-family:'Courier Prime','Courier New',monospace;font-weight:700;font-size:11px;letter-spacing:1px;padding:5px 10px;background:#f2ead2;border:1px solid #221c13;color:#221c13;cursor:pointer" style-hover="background:#fff6dd" onClick="{{ onSweep }}">SWEEP</button>
+    </sc-if>
+    <sc-if value="{{ sweepArmed }}" hint-placeholder-val="{{ false }}">
+      <button type="button" title="click again to clear the scene" style="font-family:'Courier Prime','Courier New',monospace;font-weight:700;font-size:11px;letter-spacing:1px;padding:5px 10px;background:#8c2f1b;border:1px solid #221c13;color:#f2ead2;box-shadow:1px 1px 0 #221c13;cursor:pointer" style-hover="background:#a63a22" onClick="{{ onSweep }}">SWEEP</button>
+    </sc-if>
+    <div style="position:relative">
+      <button type="button" aria-label="menu" style="width:34px;height:30px;display:inline-flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;padding:0;background:#f2ead2;border:1px solid #221c13;color:#221c13;cursor:pointer" style-hover="background:#fff6dd">
+        <i style="display:block;width:16px;height:2px;background:currentColor"></i>
+        <i style="display:block;width:16px;height:2px;background:currentColor"></i>
+        <i style="display:block;width:16px;height:2px;background:currentColor"></i>
+      </button>
+    </div>
+  </header>
+
+  <div style="flex:1;min-height:0;position:relative">
+    <div ref="{{ surfaceRef }}" style="position:absolute;inset:0;overflow:hidden;background-image:radial-gradient(rgba(34,28,19,0.14) 1px, transparent 1px);background-size:26px 26px;user-select:none;touch-action:none" onPointerDown="{{ onSurfaceDown }}" onContextMenu="{{ onSurfaceMenu }}" onDoubleClick="{{ onSurfaceDbl }}" onDragOver="{{ onDragOver }}" onDrop="{{ onDrop }}">
+      <div data-world="1" style="{{ worldStyle }}">
+
+        <sc-for list="{{ clocks }}" as="c" hint-placeholder-count="0">
+          <div style="{{ c.wrapStyle }}" onPointerDown="{{ c.down }}" onContextMenu="{{ c.menu }}">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <button type="button" data-grab="1" title="click: tick · right-click: untick" style="{{ c.dialStyle }}" onClick="{{ c.dialClick }}" onContextMenu="{{ c.dialMenu }}"></button>
+              <sc-if value="{{ c.isEditing }}" hint-placeholder-val="{{ false }}">
+                <textarea rows="2" spellCheck="false" autoFocus="{{ true }}" value="{{ c.name }}" onChange="{{ c.nameInput }}" onKeyDown="{{ c.nameKey }}" onBlur="{{ c.nameBlur }}" style="width:100%;font-family:'IM Fell English',Georgia,serif;font-size:22px;line-height:1.15;text-align:center;background:rgba(255,250,235,0.6);border:1px solid #8c2f1b;padding:2px 5px;resize:none;color:#221c13;outline:none"></textarea>
+              </sc-if>
+              <sc-if value="{{ c.notEditing }}" hint-placeholder-val="{{ true }}">
+                <div title="click to rename" style="{{ c.nameStyle }}" onClick="{{ c.nameClick }}">{{ c.name }}</div>
+              </sc-if>
+              <div style="display:flex;align-items:center;justify-content:center;gap:8px">
+                <button type="button" title="clear a slice" style="width:30px;height:24px;border:1px solid currentColor;background:transparent;color:inherit;font-family:'Courier Prime','Courier New',monospace;font-size:15px;font-weight:700;line-height:1;padding:0;opacity:0.75;cursor:pointer" style-hover="opacity:1;background:#221c13;color:#f2ead2" onClick="{{ c.minus }}">−</button>
+                <button type="button" title="segments — click to change (4 · 6 · 8 · 10 · 12)" style="{{ c.countStyle }}" onClick="{{ c.cycle }}">{{ c.count }}</button>
+                <button type="button" title="fill a slice" style="width:30px;height:24px;border:1px solid currentColor;background:transparent;color:inherit;font-family:'Courier Prime','Courier New',monospace;font-size:15px;font-weight:700;line-height:1;padding:0;cursor:pointer" style-hover="background:#8c2f1b;color:#f2ead2;border-color:#8c2f1b" onClick="{{ c.plus }}">+</button>
+              </div>
+            </div>
+            <sc-if value="{{ c.armed }}" hint-placeholder-val="{{ false }}">
+              <button type="button" style="position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);white-space:nowrap;border:1px solid #8c2f1b;background:#8c2f1b;color:#f2ead2;font-family:'Courier Prime','Courier New',monospace;font-size:10px;font-weight:700;letter-spacing:1.5px;padding:4px 10px;box-shadow:2px 2px 0 rgba(34,28,19,0.3);cursor:pointer" style-hover="background:#a63a22" onClick="{{ c.confirm }}">✕ REMOVE — CLICK TO CONFIRM · ESC</button>
+            </sc-if>
+          </div>
+        </sc-for>
+
+        <sc-for list="{{ cards }}" as="k" hint-placeholder-count="0">
+          <div style="{{ k.wrapStyle }}" onPointerDown="{{ k.down }}" onContextMenu="{{ k.menu }}">
+            <div style="background:#f2ead2;border:1px solid #221c13;box-shadow:4px 4px 0 rgba(34,28,19,0.28);display:flex;flex-direction:column">
+              <div style="display:flex;align-items:baseline;gap:8px;padding:10px 14px 6px;border-bottom:2px solid #8c2f1b">
+                <button type="button" title="person · place · event — click to change" style="border:0;background:transparent;padding:0 2px;font-size:15px;line-height:1;opacity:0.7;cursor:pointer;color:#221c13" style-hover="opacity:1" onClick="{{ k.cycleType }}">{{ k.glyph }}</button>
+                <input value="{{ k.title }}" onChange="{{ k.setTitle }}" autoFocus="{{ k.focusTitle }}" placeholder="name" spellCheck="false" style="flex:1;min-width:0;font-family:'IM Fell English SC','IM Fell English',Georgia,serif;font-size:21px;line-height:1.05;background:transparent;border:0;padding:0;outline:none;color:#221c13">
+              </div>
+              <textarea value="{{ k.body }}" onChange="{{ k.setBody }}" spellCheck="false" rows="4" style="{{ bodyStyle }}"></textarea>
+            </div>
+            <sc-if value="{{ k.armed }}" hint-placeholder-val="{{ false }}">
+              <button type="button" style="position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);white-space:nowrap;border:1px solid #8c2f1b;background:#8c2f1b;color:#f2ead2;font-family:'Courier Prime','Courier New',monospace;font-size:10px;font-weight:700;letter-spacing:1.5px;padding:4px 10px;box-shadow:2px 2px 0 rgba(34,28,19,0.3);cursor:pointer" style-hover="background:#a63a22" onClick="{{ k.confirm }}">✕ REMOVE — CLICK TO CONFIRM · ESC</button>
+            </sc-if>
+          </div>
+        </sc-for>
+
+        <sc-for list="{{ handouts }}" as="h" hint-placeholder-count="0">
+          <div style="{{ h.wrapStyle }}" onPointerDown="{{ h.down }}" onContextMenu="{{ h.menu }}">
+            <div style="background:#f2ead2;border:1px solid #221c13;box-shadow:4px 4px 0 rgba(34,28,19,0.28);padding:8px 8px 6px">
+              <button type="button" data-grab="1" title="show to the table" style="display:block;width:100%;padding:0;border:1px solid rgba(34,28,19,0.35);background:#e7dfc9;cursor:zoom-in;overflow:hidden" onClick="{{ h.show }}">
+                <sc-if value="{{ h.hasSrc }}" hint-placeholder-val="{{ false }}">
+                  <div role="img" style="{{ h.imgStyle }}"></div>
+                </sc-if>
+                <sc-if value="{{ h.noSrc }}" hint-placeholder-val="{{ true }}">
+                  <div style="{{ h.phStyle }}"><span style="font-family:'Courier Prime','Courier New',monospace;font-weight:700;font-size:10px;letter-spacing:2px;color:#5c503b;background:rgba(242,234,210,0.85);padding:3px 8px">{{ h.phLabel }}</span></div>
+                </sc-if>
+              </button>
+              <div style="display:flex;align-items:baseline;gap:8px;padding:8px 4px 2px">
+                <input value="{{ h.caption }}" onChange="{{ h.setCaption }}" placeholder="caption" spellCheck="false" style="flex:1;min-width:0;font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:15px;background:transparent;border:0;padding:0;outline:none;color:#221c13">
+                <button type="button" title="show to the table" style="border:0;background:transparent;color:#221c13;opacity:0.5;font-size:15px;line-height:1;padding:0 2px;cursor:pointer" style-hover="opacity:1" onClick="{{ h.show }}">⤢</button>
+              </div>
+            </div>
+            <sc-if value="{{ h.armed }}" hint-placeholder-val="{{ false }}">
+              <button type="button" style="position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);white-space:nowrap;border:1px solid #8c2f1b;background:#8c2f1b;color:#f2ead2;font-family:'Courier Prime','Courier New',monospace;font-size:10px;font-weight:700;letter-spacing:1.5px;padding:4px 10px;box-shadow:2px 2px 0 rgba(34,28,19,0.3);cursor:pointer" style-hover="background:#a63a22" onClick="{{ h.confirm }}">✕ REMOVE — CLICK TO CONFIRM · ESC</button>
+            </sc-if>
+          </div>
+        </sc-for>
+
+      </div>
+
+      <sc-if value="{{ radialOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="{{ radialStyle }}" onPointerDown="{{ stop }}" onContextMenu="{{ prevent }}">
+          <div style="position:absolute;left:-76px;top:-76px;width:152px;height:152px;border-radius:50%;border:1px dashed rgba(34,28,19,0.5);pointer-events:none"></div>
+          <div style="position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#221c13"></div>
+          <sc-for list="{{ radialItems }}" as="it" hint-placeholder-count="0">
+            <div style="{{ it.posStyle }}">
+              <sc-if value="{{ it.danger }}" hint-placeholder-val="{{ false }}">
+                <button type="button" title="{{ it.label }}" style="width:48px;height:48px;border-radius:50%;border:1px solid #8c2f1b;background:#f2ead2;color:#8c2f1b;box-shadow:2px 2px 0 rgba(34,28,19,0.28);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer" style-hover="background:#8c2f1b;color:#f2ead2" onClick="{{ it.pick }}"><span style="font-size:18px;line-height:1">{{ it.glyph }}</span></button>
+              </sc-if>
+              <sc-if value="{{ it.safe }}" hint-placeholder-val="{{ true }}">
+                <button type="button" title="{{ it.label }}" style="width:48px;height:48px;border-radius:50%;border:1px solid #221c13;background:#f2ead2;color:#221c13;box-shadow:2px 2px 0 rgba(34,28,19,0.28);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer" style-hover="background:#221c13;color:#e7dfc9" onClick="{{ it.pick }}"><span style="font-size:18px;line-height:1">{{ it.glyph }}</span></button>
+              </sc-if>
+            </div>
+            <div style="{{ it.lblStyle }}">{{ it.label }}</div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <sc-if value="{{ fgOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:100;background:rgba(34,28,19,0.78);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:48px 40px" onClick="{{ closeFg }}">
+      <div style="background:#f2ead2;border:2px solid #221c13;box-shadow:8px 8px 0 rgba(34,28,19,0.35);padding:10px;max-width:92vw" onClick="{{ stop }}">
+        <sc-if value="{{ fgHasSrc }}" hint-placeholder-val="{{ false }}">
+          <div role="img" style="{{ fgImgStyle }}"></div>
+        </sc-if>
+        <sc-if value="{{ fgNoSrc }}" hint-placeholder-val="{{ true }}">
+          <div style="{{ fgPhStyle }}"><span style="font-family:'Courier Prime','Courier New',monospace;font-weight:700;font-size:12px;letter-spacing:3px;color:#5c503b;background:rgba(242,234,210,0.85);padding:5px 12px">{{ fgPhLabel }}</span></div>
+        </sc-if>
+      </div>
+      <div style="color:#e7dfc9;font-style:italic;font-size:18px;text-align:center;text-wrap:pretty">{{ fgCaption }}</div>
+      <button type="button" aria-label="close" title="esc" style="position:absolute;top:12px;right:16px;width:34px;height:30px;border:0;background:transparent;color:#e7dfc9;font-size:18px;line-height:1;padding:0;cursor:pointer;opacity:0.75" style-hover="opacity:1" onClick="{{ closeFg }}">✕</button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showRoll }}" hint-placeholder-val="{{ true }}">
+    <div aria-live="polite" style="position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:90;pointer-events:none">
+      <div style="background:#f2ead2;border:1px solid #221c13;box-shadow:3px 3px 0 rgba(34,28,19,0.35);padding:8px 10px;min-width:220px">
+        <div style="font-family:'Courier Prime','Courier New',monospace;font-weight:700;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#5c503b;margin-bottom:4px">Cross · Skirmish · risky</div>
+        <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
+          <span style="width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;border:1.5px solid #221c13;background:#f6efdb;font-family:'Big Shoulders Stencil Text','Big Shoulders Stencil Display',Impact,'Arial Narrow',sans-serif;font-weight:800;font-size:16px">4</span>
+          <span style="width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;border:1.5px solid #221c13;background:#f6efdb;font-family:'Big Shoulders Stencil Text','Big Shoulders Stencil Display',Impact,'Arial Narrow',sans-serif;font-weight:800;font-size:16px;color:#8c2f1b">6</span>
+          <span style="width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;border:1.5px solid #221c13;background:#f6efdb;font-family:'Big Shoulders Stencil Text','Big Shoulders Stencil Display',Impact,'Arial Narrow',sans-serif;font-weight:800;font-size:16px">2</span>
+          <span style="margin-left:6px;font-family:'Big Shoulders Stencil Text','Big Shoulders Stencil Display',Impact,'Arial Narrow',sans-serif;font-weight:800;font-size:14px;letter-spacing:1px">FULL SUCCESS</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <input type="file" accept="image/*" ref="{{ fileRef }}" onChange="{{ onFile }}" style="display:none">
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;clockDiameter&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:150,&quot;min&quot;:120,&quot;max&quot;:200,&quot;step&quot;:10,&quot;unit&quot;:&quot;px&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Scene&quot;},&quot;ruledCards&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Scene&quot;},&quot;showRoll&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Chrome&quot;}}">
+const W = 1440, H = 810, RAD = 76;
+const INK = '#221c13', RED = '#8c2f1b', FACE = '#f6efdb';
+const MONO = "'Courier Prime','Courier New',monospace", BODY = "'IM Fell English',Georgia,serif";
+const GLYPH = { npc: '♟', location: '⌖', other: '✦' };
+const NEXT_TYPE = { npc: 'location', location: 'other', other: 'npc' };
+const SIZES = [4, 6, 8, 10, 12];
+const STRIPES = 'repeating-linear-gradient(135deg, #ddd3b8 0 6px, #e7dfc9 6px 12px)';
+const uid = () => Math.random().toString(36).slice(2, 8);
+const inControl = (t) => { const c = t && t.closest ? t.closest('button,input,select,textarea') : null; return !!c && !c.hasAttribute('data-grab'); };
+const isTyping = (t) => !!t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable);
+const baseName = (f) => (f.name || 'Handout').replace(/\.[^.]+$/, '');
+
+const SEED = [
+  { id: 'k1', kind: 'clock', name: 'Alarm at the sword school', size: 4, filled: 1, x: 110, y: 70 },
+  { id: 'k2', kind: 'clock', name: 'Bluecoat patrol', size: 6, filled: 3, x: 350, y: 70 },
+  { id: 'k3', kind: 'clock', name: "Mylera's patience", size: 8, filled: 5, x: 590, y: 70 },
+  { id: 'c1', kind: 'card', type: 'npc', title: 'Mylera Klev', body: 'Red Sashes leader. On the balcony, sword across her knees. Knows Cross by sight.', x: 110, y: 400 },
+  { id: 'c2', kind: 'card', type: 'location', title: 'The training hall', body: 'Lantern-lit. Racks of practice blades. A trapdoor under the mats.', x: 440, y: 440 },
+  { id: 'c3', kind: 'card', type: 'other', title: 'The ledger is a forgery', body: 'Someone swapped it before we did. The ink is still wet.', x: 760, y: 400 },
+  { id: 'h1', kind: 'handout', src: null, ph: { h: 200, label: 'MAP · SWORD SCHOOL, GROUND FLOOR' }, caption: 'Sword school — ground floor', x: 1090, y: 60 },
+  { id: 'h2', kind: 'handout', src: null, ph: { h: 230, label: 'HANDOUT · LETTER' }, caption: 'Letter from the Dimmer Sisters', x: 1090, y: 360 },
+];
+
+class Component extends DCLogic {
+  surfaceRef = React.createRef();
+  fileRef = React.createRef();
+  drag = null;
+  justDragged = false;
+  pendingAt = null;
+  flashTimer = 0;
+  state = { vw: 0, vh: 0, els: SEED, sel: null, armed: false, radial: null, fg: null, sweep: false, editing: null, flash: '' };
+
+  componentDidMount() {
+    const el = this.surfaceRef.current;
+    const measure = () => { if (el) this.setState({ vw: el.clientWidth, vh: el.clientHeight }); };
+    measure();
+    if (el && typeof ResizeObserver !== 'undefined') { this.ro = new ResizeObserver(measure); this.ro.observe(el); }
+    this.onKey = (e) => {
+      const S = this.state, typing = isTyping(e.target);
+      if (e.key === 'Escape') {
+        if (typing) e.target.blur();
+        if (S.editing) return this.setState({ editing: null });
+        if (S.radial) return this.setState({ radial: null });
+        if (S.fg) return this.setState({ fg: null });
+        if (S.sweep) return this.setState({ sweep: false });
+        return this.setState({ sel: null, armed: false });
+      }
+      if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
+      if ((e.key === 'Delete' || e.key === 'Backspace') && S.sel && !S.fg) {
+        e.preventDefault();
+        if (S.armed) this.remove(S.sel); else this.setState({ armed: true });
+      }
+    };
+    this.onPaste = (e) => {
+      if (isTyping(e.target) || !e.clipboardData) return;
+      const f = Array.from(e.clipboardData.files || []).find((x) => x.type.startsWith('image/'));
+      if (!f) return;
+      e.preventDefault();
+      this.addHandout({ x: W / 2, y: H / 2 }, URL.createObjectURL(f), 'Pasted handout');
+    };
+    window.addEventListener('keydown', this.onKey);
+    window.addEventListener('paste', this.onPaste);
+  }
+  componentWillUnmount() {
+    if (this.ro) this.ro.disconnect();
+    window.removeEventListener('keydown', this.onKey);
+    window.removeEventListener('paste', this.onPaste);
+    clearTimeout(this.flashTimer);
+  }
+
+  // ---- table geometry: a 1440×810 tabletop scaled to fit, so everyone sees the same layout
+  geo() {
+    const { vw, vh } = this.state;
+    if (!vw || !vh) return { s: 1, ox: 0, oy: 0 };
+    const s = Math.min(vw / W, vh / H);
+    return { s, ox: (vw - W * s) / 2, oy: (vh - H * s) / 2 };
+  }
+  canvasPt(e) { const r = this.surfaceRef.current.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+  worldPt(e) { const c = this.canvasPt(e), g = this.geo(); return { x: (c.x - g.ox) / g.s, y: (c.y - g.oy) / g.s }; }
+
+  // ---- element writes (in the app: ledger.scene.items/<id>)
+  find(id) { return this.state.els.find((x) => x.id === id); }
+  patch(id, p) { this.setState((s) => ({ els: s.els.map((x) => (x.id === id ? { ...x, ...(typeof p === 'function' ? p(x) : p) } : x)) })); }
+  select(id) { this.setState((s) => ({ sel: id, armed: s.sel === id ? s.armed : false })); }
+  remove(id) { this.setState((s) => ({ els: s.els.filter((x) => x.id !== id), sel: s.sel === id ? null : s.sel, armed: false, fg: s.fg === id ? null : s.fg, radial: null, editing: null })); }
+  add(el) {
+    const id = uid();
+    const editing = el.kind === 'clock' ? id : el.kind === 'card' ? id + ':title' : null;
+    this.setState((s) => ({ els: [...s.els, { id, ...el }], sel: id, armed: false, radial: null, editing }));
+  }
+  addClock(p) { this.add({ kind: 'clock', name: 'New clock', size: 6, filled: 0, x: Math.round(p.x - 100), y: Math.round(p.y - 90) }); }
+  addCard(p) { this.add({ kind: 'card', type: 'other', title: '', body: '', x: Math.round(p.x - 150), y: Math.round(p.y - 80) }); }
+  addHandout(p, src, caption) {
+    const add = (ratio) => this.add({ kind: 'handout', src, ratio, ph: null, caption, x: Math.round(p.x - 160), y: Math.round(p.y - 120) });
+    const im = new Image();
+    im.onload = () => add(`${im.naturalWidth} / ${im.naturalHeight}`);
+    im.onerror = () => add('3 / 2');
+    im.src = src;
+  }
+  toTable(id) {
+    const k = this.find(id);
+    this.flash(`${(k && k.title) || 'the card'} moved to the Table`);
+    this.remove(id);
+  }
+  flash(text) {
+    clearTimeout(this.flashTimer);
+    this.setState({ flash: text });
+    this.flashTimer = setTimeout(() => this.setState({ flash: '' }), 2500);
+  }
+
+  // ---- drag (window listeners until the pointer lifts, as on the Table)
+  beginDrag(id, e) {
+    const el = this.find(id);
+    if (!el) return;
+    this.justDragged = false;
+    this.drag = { id, sx: e.clientX, sy: e.clientY, ox: el.x, oy: el.y, moved: false };
+    const move = (ev) => {
+      const d = this.drag;
+      if (!d) return;
+      const dx = ev.clientX - d.sx, dy = ev.clientY - d.sy;
+      if (!d.moved && Math.abs(dx) + Math.abs(dy) > 4) d.moved = true;
+      if (!d.moved) return;
+      const s = this.geo().s;
+      this.patch(d.id, { x: Math.round(d.ox + dx / s), y: Math.round(d.oy + dy / s) });
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+      const d = this.drag;
+      this.drag = null;
+      if (!d) return;
+      this.justDragged = d.moved;
+      if (!d.moved) this.select(d.id);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+    this.setState({ radial: null });
+  }
+  openRadial(e, id) {
+    e.preventDefault();
+    e.stopPropagation();
+    const c = this.canvasPt(e), w = this.worldPt(e);
+    this.drag = null;
+    this.setState({ radial: { x: c.x, y: c.y, wx: w.x, wy: w.y, id: id || null }, editing: null });
+  }
+
+  // ---- surface + header handlers
+  onSurfaceDown = (e) => {
+    if (e.button === 2 || inControl(e.target)) return;
+    if (this.state.radial) { this.setState({ radial: null }); return; }
+    this.setState({ sel: null, armed: false });
+  };
+  onSurfaceMenu = (e) => this.openRadial(e, null);
+  onSurfaceDbl = (e) => { if (e.target && e.target.dataset && e.target.dataset.world) this.addCard(this.worldPt(e)); };
+  onDragOver = (e) => e.preventDefault();
+  onDrop = (e) => {
+    e.preventDefault();
+    const f = Array.from(e.dataTransfer.files || []).find((x) => x.type.startsWith('image/'));
+    if (f) this.addHandout(this.worldPt(e), URL.createObjectURL(f), baseName(f));
+  };
+  onFile = (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (f) this.addHandout(this.pendingAt || { x: W / 2, y: H / 2 }, URL.createObjectURL(f), baseName(f));
+    e.target.value = '';
+    this.pendingAt = null;
+  };
+  onSweep = () => (this.state.sweep
+    ? this.setState({ els: [], sweep: false, sel: null, armed: false, fg: null, radial: null, editing: null })
+    : this.setState({ sweep: true }));
+  closeFg = () => this.setState({ fg: null });
+  stop = (e) => e.stopPropagation();
+  prevent = (e) => { e.preventDefault(); e.stopPropagation(); };
+
+  renderVals() {
+    const S = this.state, P = this.props;
+    const D = P.clockDiameter ?? 150, ruled = P.ruledCards ?? true, showRoll = P.showRoll ?? true;
+    const g = this.geo();
+    const worldStyle = { position: 'absolute', left: 0, top: 0, width: W, height: H, transformOrigin: '0 0', transform: `translate(${g.ox}px,${g.oy}px) scale(${g.s})` };
+    const ring = (id) => (S.sel === id ? `0 0 0 2px ${S.armed ? RED : INK}` : '');
+    const common = (el, width) => ({
+      id: el.id,
+      wrapStyle: { position: 'absolute', left: el.x, top: el.y, width, zIndex: S.sel === el.id ? 5 : 2, cursor: 'move', boxShadow: el.kind === 'clock' ? 'none' : ring(el.id) || 'none' },
+      down: (e) => { if (e.button === 2 || inControl(e.target)) return; e.stopPropagation(); this.beginDrag(el.id, e); },
+      menu: (e) => this.openRadial(e, el.id),
+      armed: S.sel === el.id && S.armed,
+      confirm: (e) => { e.stopPropagation(); this.remove(el.id); },
+    });
+
+    const clocks = S.els.filter((e) => e.kind === 'clock').map((c) => {
+      const seg = 360 / c.size, deg = Math.max(0, Math.min(c.size, c.filled)) * seg, full = c.filled >= c.size;
+      const face = `conic-gradient(${RED} 0deg ${deg}deg, ${FACE} ${deg}deg 360deg)`;
+      const dividers = `repeating-conic-gradient(from -1deg, ${INK} 0deg 2deg, transparent 2deg ${seg}deg)`;
+      const shadow = [ring(c.id), full ? '0 0 0 4px rgba(140,47,27,0.35)' : '2px 2px 0 rgba(34,28,19,0.25)'].filter(Boolean).join(', ');
+      const tick = (d) => this.patch(c.id, (x) => ({ filled: Math.max(0, Math.min(x.size, x.filled + d)) }));
+      return {
+        ...common(c, Math.max(200, D + 24)),
+        dialStyle: { display: 'block', width: D, height: D, borderRadius: '50%', border: `3px solid ${INK}`, padding: 0, flex: 'none', background: `${dividers}, ${face}`, boxShadow: shadow, cursor: 'pointer' },
+        dialClick: (e) => { e.stopPropagation(); if (this.justDragged) return; tick(e.shiftKey ? -1 : 1); },
+        dialMenu: (e) => { e.preventDefault(); e.stopPropagation(); tick(-1); },
+        name: c.name,
+        isEditing: S.editing === c.id,
+        notEditing: S.editing !== c.id,
+        nameStyle: { fontSize: 22, lineHeight: 1.15, textAlign: 'center', textWrap: 'pretty', overflowWrap: 'anywhere', cursor: 'text', padding: '0 4px', minHeight: 25, color: full ? RED : INK },
+        nameClick: (e) => { e.stopPropagation(); if (this.justDragged) return; this.setState({ editing: c.id, sel: c.id, armed: false }); },
+        nameInput: (e) => this.patch(c.id, { name: e.target.value.replace(/\n/g, ' ') }),
+        nameKey: (e) => { if (e.key === 'Enter' || e.key === 'Escape') { e.preventDefault(); e.target.blur(); } },
+        nameBlur: () => this.setState((s) => (s.editing === c.id ? { editing: null } : null)),
+        count: `${c.filled} / ${c.size}`,
+        countStyle: { border: 'none', background: 'transparent', padding: '0 2px', fontFamily: MONO, fontSize: 13, fontWeight: 700, letterSpacing: 1, color: full ? RED : INK, cursor: 'pointer' },
+        cycle: (e) => { e.stopPropagation(); this.patch(c.id, (x) => { const size = SIZES[(SIZES.indexOf(x.size) + 1) % SIZES.length]; return { size, filled: Math.min(x.filled, size) }; }); },
+        plus: (e) => { e.stopPropagation(); tick(1); },
+        minus: (e) => { e.stopPropagation(); tick(-1); },
+      };
+    });
+
+    const cards = S.els.filter((e) => e.kind === 'card').map((k) => ({
+      ...common(k, 300),
+      glyph: GLYPH[k.type] || '✦',
+      cycleType: (e) => { e.stopPropagation(); this.patch(k.id, (x) => ({ type: NEXT_TYPE[x.type] || 'npc' })); },
+      title: k.title,
+      setTitle: (e) => this.patch(k.id, { title: e.target.value }),
+      focusTitle: S.editing === k.id + ':title',
+      body: k.body,
+      setBody: (e) => this.patch(k.id, { body: e.target.value }),
+    }));
+    const bodyStyle = {
+      display: 'block', width: '100%', minHeight: 104, fontFamily: BODY, fontSize: 16, lineHeight: '26px', padding: '0 14px', margin: '6px 0 12px',
+      background: ruled ? 'repeating-linear-gradient(to bottom, transparent 0 25px, rgba(34,28,19,0.16) 25px 26px)' : 'transparent',
+      border: 0, outline: 'none', resize: 'none', color: INK, fieldSizing: 'content', overflow: 'hidden',
+    };
+
+    const handouts = S.els.filter((e) => e.kind === 'handout').map((h) => ({
+      ...common(h, 320),
+      hasSrc: !!h.src,
+      noSrc: !h.src,
+      imgStyle: { display: 'block', width: '100%', aspectRatio: h.ratio || '3 / 2', maxHeight: 380, backgroundImage: h.src ? `url("${h.src}")` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' },
+      phStyle: { height: h.ph ? h.ph.h : 200, background: STRIPES, display: 'flex', alignItems: 'center', justifyContent: 'center' },
+      phLabel: h.ph ? h.ph.label : 'HANDOUT',
+      caption: h.caption,
+      setCaption: (e) => this.patch(h.id, { caption: e.target.value }),
+      show: (e) => { e.stopPropagation(); if (this.justDragged) return; this.setState({ fg: h.id, radial: null }); },
+    }));
+
+    // radial menu: on the empty surface it adds; on an element it acts on that element
+    const r = S.radial, target = r && r.id ? this.find(r.id) : null;
+    const arm = (id) => () => this.setState({ sel: id, armed: true });
+    const items = !r ? [] : !target ? [
+      { glyph: '◔', label: 'CLOCK', act: () => this.addClock({ x: r.wx, y: r.wy }) },
+      { glyph: '▭', label: 'CARD', act: () => this.addCard({ x: r.wx, y: r.wy }) },
+      { glyph: '▣', label: 'HANDOUT', act: () => { this.pendingAt = { x: r.wx, y: r.wy }; if (this.fileRef.current) this.fileRef.current.click(); } },
+    ] : target.kind === 'clock' ? [
+      { glyph: '↺', label: 'RESET', act: () => this.patch(target.id, { filled: 0 }) },
+      { glyph: '✕', label: 'REMOVE', danger: true, act: arm(target.id) },
+    ] : target.kind === 'card' ? [
+      { glyph: '⤢', label: 'TO TABLE', act: () => this.toTable(target.id) },
+      { glyph: '✕', label: 'REMOVE', danger: true, act: arm(target.id) },
+    ] : [
+      { glyph: '⤢', label: 'SHOW', act: () => this.setState({ fg: target.id }) },
+      { glyph: '✕', label: 'REMOVE', danger: true, act: arm(target.id) },
+    ];
+    const radialItems = items.map((it, i) => {
+      const a = -Math.PI / 2 + i * ((Math.PI * 2) / items.length);
+      const bx = Math.cos(a) * RAD, by = Math.sin(a) * RAD, lx = Math.cos(a) * (RAD + 46), ly = Math.sin(a) * (RAD + 46);
+      return {
+        glyph: it.glyph, label: it.label, danger: !!it.danger, safe: !it.danger,
+        posStyle: { position: 'absolute', left: bx - 24, top: by - 24, width: 48, height: 48 },
+        lblStyle: { position: 'absolute', left: lx - 46, top: ly - 7, width: 92, textAlign: 'center', fontFamily: MONO, fontSize: 9, letterSpacing: 1.5, lineHeight: '14px', color: INK, background: 'rgba(231,223,201,0.85)', pointerEvents: 'none' },
+        pick: (e) => { e.stopPropagation(); this.setState({ radial: null }); it.act(); },
+      };
+    });
+
+    const armedEl = S.armed && S.sel ? this.find(S.sel) : null;
+    const hint = S.sweep ? 'sweep the scene? click SWEEP again · esc keeps it' : armedEl ? `remove this ${armedEl.kind}? click the red tag or press ⌫ again · esc keeps it` : S.flash;
+    const fgEl = S.fg ? this.find(S.fg) : null;
+
+    return {
+      surfaceRef: this.surfaceRef, fileRef: this.fileRef, worldStyle,
+      onSurfaceDown: this.onSurfaceDown, onSurfaceMenu: this.onSurfaceMenu, onSurfaceDbl: this.onSurfaceDbl,
+      onDragOver: this.onDragOver, onDrop: this.onDrop, onFile: this.onFile, stop: this.stop, prevent: this.prevent,
+      hint, sweepIdle: !S.sweep, sweepArmed: S.sweep, onSweep: this.onSweep,
+      clocks, cards, handouts, bodyStyle,
+      radialOpen: !!r, radialStyle: r ? { position: 'absolute', left: r.x, top: r.y, width: 0, height: 0, zIndex: 40 } : {}, radialItems,
+      fgOpen: !!fgEl, fgHasSrc: !!(fgEl && fgEl.src), fgNoSrc: !!(fgEl && !fgEl.src), fgImgStyle: { display: 'block', width: 'min(1100px, calc(92vw - 24px))', height: 'min(700px, calc(82vh - 24px))', backgroundImage: fgEl && fgEl.src ? `url("${fgEl.src}")` : 'none', backgroundSize: 'contain', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' },
+      fgCaption: (fgEl && fgEl.caption) || '', fgPhLabel: (fgEl && fgEl.ph && fgEl.ph.label) || 'HANDOUT',
+      fgPhStyle: { width: 'min(1100px, 88vw)', height: 'min(640px, 72vh)', background: STRIPES, display: 'flex', alignItems: 'center', justifyContent: 'center' },
+      closeFg: this.closeFg, showRoll,
+    };
+  }
+}
+</script>
+</body>
+</html>

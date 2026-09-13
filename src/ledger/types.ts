@@ -126,12 +126,46 @@ export interface CharacterSheet {
   createdAt: number;
 }
 
+// ---------------------------------------------------------------- scene (the live tabletop)
+
+/** Items on the Scene surface. x, y are the item's top-left in table units (fixed 1440 × 810 surface). */
+export type SceneItem = SceneClock | SceneCard;
+
+export interface SceneClock {
+  id: string;
+  kind: 'clock';
+  x: number;
+  y: number;
+  createdAt: number;
+  name: string;
+  size: number; // 4 | 6 | 8 | 10 | 12
+  filled: number;
+}
+
+export type SceneCardType = 'npc' | 'location' | 'other';
+
+export interface SceneCard {
+  id: string;
+  kind: 'card';
+  x: number;
+  y: number;
+  createdAt: number;
+  type: SceneCardType;
+  title: string;
+  body: string;
+}
+
+export interface Scene {
+  items: Record<string, SceneItem>;
+}
+
 export interface Ledger {
   v: 2;
   crew: { name: string; meta: string };
   nodes: Record<string, TableNode>;
   edges: Record<string, Edge>;
   sheets: { crew: CrewSheet; chars: Record<string, CharacterSheet> };
+  scene: Scene;
   savedAt?: string;
 }
 
@@ -176,5 +210,6 @@ export interface LedgerFileV1 {
   nodes: NodeV1[];
   edges: EdgeV1[];
   sheets?: { crew: CrewSheetV1; chars: CharacterSheet[] };
+  scene?: { items: SceneItem[] };
   score?: string;
 }

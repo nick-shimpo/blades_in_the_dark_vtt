@@ -83,3 +83,34 @@ describe('export', () => {
     expect(exportLedger(l).nodes[0].clocks).toEqual([]);
   });
 });
+
+describe('scene', () => {
+  it('older ledgers get an empty scene', () => {
+    const l = importLedger(JSON.stringify(example))!;
+    expect(l.scene).toEqual({ items: {} });
+  });
+  it('scene items normalise from arrays or maps, unknown kinds are dropped', () => {
+    const l = normalizeLedger({
+      crew: { name: 'x' },
+      nodes: [],
+      scene: {
+        items: [
+          { id: 'k1', kind: 'clock', name: 'Alarm', size: 4, filled: 9, x: 10.4, y: 20 },
+          { id: 'c1', kind: 'card', type: 'npc', title: 'Mylera', body: 'sword', x: 0, y: 0 },
+          { id: 'h1', kind: 'handout', src: 'x', x: 0, y: 0 },
+        ],
+      },
+    });
+    expect(Object.keys(l.scene.items)).toEqual(['k1', 'c1']);
+    expect(l.scene.items.k1).toMatchObject({ kind: 'clock', size: 4, filled: 4, x: 10 });
+    expect(l.scene.items.c1).toMatchObject({ kind: 'card', type: 'npc', title: 'Mylera' });
+    const again = normalizeLedger({ crew: { name: 'x' }, nodes: {}, scene: { items: { k1: l.scene.items.k1 } } });
+    expect(again.scene.items.k1).toMatchObject({ kind: 'clock', name: 'Alarm' });
+  });
+  it('export carries the scene as an array and it round-trips', () => {
+    const l = normalizeLedger({ crew: { name: 'x' }, nodes: [], scene: { items: [{ id: 'k1', kind: 'clock', name: 'A', size: 6, filled: 2, x: 1, y: 2, createdAt: 5 }] } });
+    const out = exportLedger(l);
+    expect(Array.isArray(out.scene!.items)).toBe(true);
+    expect(importLedger(JSON.stringify(out))!.scene).toEqual(l.scene);
+  });
+});
