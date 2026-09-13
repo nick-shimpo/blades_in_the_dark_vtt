@@ -1,12 +1,12 @@
 # Doskvol Table
 
-A shared virtual tabletop for one *Blades in the Dark* campaign: a pan-and-zoom map of factions, people and places with clocks and relationships (Network), a live surface of big clocks and index cards for the moment of play that is swept between scores (Play), interactive character and crew sheets with the rules wired in (Sheets), GM spark tables (Sparks), and a play reference (Tools). Built for one GM and a few friends playing online together.
+A shared virtual tabletop for one *Blades in the Dark* campaign. Tabs, in order: **Play** (a live surface of big clocks and index cards for the moment of play, swept between scores), **Sheets** (interactive character and crew sheets with the rules wired in), **References** (rules reference sheets and static handouts such as the city map), **Network** (a pan-and-zoom map of factions, people and places with clocks and relationships), **Sparks** (GM random tables) and, on the GM link only, **GM Notes** (the procedure reference). Built for one GM and a few friends playing online together.
 
 Live at **https://nick-shimpo.github.io/blades_in_the_dark_vtt/**
 
 ## How it works
 
-- A campaign has two links: the player link `#/c/<random id>` and the GM link `#/gm/<random id>`. Either is the only key: whoever has it can read and edit. The GM link is not a login, just a slightly different screen (for now: progress clocks on the Network are GM-only). Share the player link with your players, keep both out of public places.
+- A campaign has two links: the player link `#/c/<random id>` and the GM link `#/gm/<random id>`. Either is the only key: whoever has it can read and edit. The GM link is not a login, just a slightly different screen: the GM Notes tab and the progress clocks on the Network are GM-only. Share the player link with your players, keep both out of public places.
 - Everything a table changes is one JSON document, the **ledger**. It is stored in a Firebase Realtime Database and pushed live to every open browser. Without a Firebase config the app keeps the ledger in the browser's localStorage instead (local mode).
 - The ☰ menu exports and imports ledgers as `.ledger.json`, in the same shape the original prototype used, so files move both ways.
 - No accounts, no roles, no server code of ours, and no file uploads. See `docs/decisions/` for why.
@@ -42,7 +42,8 @@ src/data/        bundled game content (book, sheets, sparks, claims maps) + type
 src/ledger/      ledger types, blank documents, import/export, rules engine, tests
 src/sync/        store interface, local adapter, Firebase adapter
 src/ui/          context, hash routing
-src/views/       table, scene, sheets, sparks, play
+src/views/       table (Network), scene (Play), sheets, references, sparks, play (GM Notes)
+public/references/  static reference images, listed in src/views/references/manifest.ts
 design/handoff/  the Claude Design handover: prototype, docs, data, source pack
 design/handoff-scene/  the second handover: the Scene view
 docs/            decisions, Firebase rules
