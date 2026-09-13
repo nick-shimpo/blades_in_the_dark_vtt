@@ -50,17 +50,31 @@ export function makeLedgerApi(base: Omit<LedgerApi, 'saveChar' | 'saveCrew' | 's
 }
 
 /**
- * Views. The ids are the URL segments; the folders under src/views keep their original names
- * (network = views/table, play = views/scene, tools = views/play).
+ * Views, in tab order. The ids are the URL segments; the folders under src/views keep their
+ * original names (network = views/table, play = views/scene, tools = views/play = "GM Notes").
+ * Keys 1..n are assigned by visible position, so players and the GM both count from 1.
  */
-export type ViewId = 'network' | 'play' | 'sparks' | 'tools' | 'sheets';
-export const VIEWS: { id: ViewId; label: string; key: string }[] = [
-  { id: 'network', label: 'Network', key: '1' },
-  { id: 'play', label: 'Play', key: '2' },
-  { id: 'sparks', label: 'Sparks', key: '3' },
-  { id: 'tools', label: 'Tools', key: '4' },
-  { id: 'sheets', label: 'Sheets', key: '5' },
+export type ViewId = 'play' | 'sheets' | 'references' | 'network' | 'sparks' | 'tools';
+export interface ViewDef {
+  id: ViewId;
+  label: string;
+  /** Only shown (and reachable) on the GM link. */
+  gmOnly?: boolean;
+}
+export const VIEWS: ViewDef[] = [
+  { id: 'play', label: 'Play' },
+  { id: 'sheets', label: 'Sheets' },
+  { id: 'references', label: 'References' },
+  { id: 'network', label: 'Network' },
+  { id: 'sparks', label: 'Sparks' },
+  { id: 'tools', label: 'GM Notes', gmOnly: true },
 ];
+export const DEFAULT_VIEW: ViewId = 'play';
+
+/** The tabs this role can see, with their keyboard shortcut. */
+export function visibleViews(role: Role): (ViewDef & { key: string })[] {
+  return VIEWS.filter((v) => !v.gmOnly || role === 'gm').map((v, i) => ({ ...v, key: String(i + 1) }));
+}
 
 /**
  * Who is looking: decided by the URL alone (`#/gm/<id>` vs `#/c/<id>`), no authentication.

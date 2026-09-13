@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import { CAMPAIGN_ID_RE } from '../ledger/ids';
-import type { Role, ViewId } from './context';
+import { DEFAULT_VIEW, VIEWS, type Role, type ViewId } from './context';
 
 export interface Route {
   campaignId: string | null;
@@ -14,31 +14,34 @@ export interface Route {
  *   GM:      #/gm/<id>[/<view>]
  * The role is nothing more than which prefix was used.
  */
-const VIEW_IDS: ViewId[] = ['network', 'play', 'sparks', 'tools', 'sheets'];
+const VIEW_IDS: ViewId[] = VIEWS.map((v) => v.id);
 /** Segments from the first day of the app, kept so old links still open. */
 const LEGACY_VIEWS: Record<string, ViewId> = { table: 'network', scene: 'play' };
 
-export function parseView(seg: string | undefined): ViewId {
-  if (!seg) return 'network';
-  if ((VIEW_IDS as string[]).includes(seg)) return seg as ViewId;
-  return LEGACY_VIEWS[seg] ?? 'network';
+export function parseView(seg: string | undefined, role: Role = 'player'): ViewId {
+  let view: ViewId = DEFAULT_VIEW;
+  if (seg && (VIEW_IDS as string[]).includes(seg)) view = seg as ViewId;
+  else if (seg && LEGACY_VIEWS[seg]) view = LEGACY_VIEWS[seg];
+  const def = VIEWS.find((v) => v.id === view);
+  return def?.gmOnly && role !== 'gm' ? DEFAULT_VIEW : view;
 }
 
 export function parseHash(hash: string): Route {
   const parts = hash.replace(/^#\/?/, '').split('/').filter(Boolean);
   const prefix = parts[0];
   if ((prefix === 'c' || prefix === 'gm') && parts[1] && CAMPAIGN_ID_RE.test(parts[1])) {
-    return { campaignId: parts[1], view: parseView(parts[2]), role: prefix === 'gm' ? 'gm' : 'player' };
+    const role: Role = prefix === 'gm' ? 'gm' : 'player';
+    return { campaignId: parts[1], view: parseView(parts[2], role), role };
   }
-  return { campaignId: null, view: 'network', role: 'player' };
+  return { campaignId: null, view: DEFAULT_VIEW, role: 'player' };
 }
 
-export function hrefFor(campaignId: string, view: ViewId = 'network', role: Role = 'player'): string {
-  return `#/${role === 'gm' ? 'gm' : 'c'}/${campaignId}${view === 'network' ? '' : `/${view}`}`;
+export function hrefFor(campaignId: string, view: ViewId = DEFAULT_VIEW, role: Role = 'player'): string {
+  return `#/${role === 'gm' ? 'gm' : 'c'}/${campaignId}${view === DEFAULT_VIEW ? '' : `/${view}`}`;
 }
 
 /** Navigate within the campaign, keeping the current role unless one is given. */
-export function navigate(campaignId: string | null, view: ViewId = 'network', role?: Role): void {
+export function navigate(campaignId: string | null, view: ViewId = DEFAULT_VIEW, role?: Role): void {
   if (!campaignId) {
     location.hash = '#/';
     return;
@@ -47,7 +50,7 @@ export function navigate(campaignId: string | null, view: ViewId = 'network', ro
 }
 
 export function campaignLink(campaignId: string, role: Role): string {
-  return `${location.origin}${location.pathname}${hrefFor(campaignId, 'network', role)}`;
+  return `${location.origin}${location.pathname}${hrefFor(campaignId, DEFAULT_VIEW, role)}`;
 }
 
 export function useRoute(): Route {

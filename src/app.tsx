@@ -4,11 +4,12 @@ import { newCampaignId } from './ledger/ids';
 import { blankLedger, exportLedger, importLedger } from './ledger/normalize';
 import type { Ledger, RollRecord } from './ledger/types';
 import { createStore, firebaseAvailable, forgetCampaign, recentCampaigns, rememberCampaign, type Store, type StoreStatus } from './sync';
-import { LedgerContext, makeLedgerApi, useLedger, VIEWS, type Role, type ViewId } from './ui/context';
+import { DEFAULT_VIEW, LedgerContext, makeLedgerApi, useLedger, visibleViews, type Role, type ViewId } from './ui/context';
 import { BOOK_EVENT, FIT_EVENT, HINT_EVENT, SWEEP_EVENT, SWEEP_STATE_EVENT, isTyping, setHint } from './ui/events';
 import { RollTicker } from './ui/RollTicker';
 import { campaignLink, hrefFor, navigate, useRoute } from './ui/route';
 import { PlayView } from './views/play';
+import { ReferencesView } from './views/references';
 import { SceneView } from './views/scene';
 import { SheetsView } from './views/sheets';
 import { SparksView } from './views/sparks';
@@ -34,7 +35,7 @@ function Home() {
     store.replace(ledger);
     rememberCampaign(id, ledger.crew.name, 'gm');
     store.close();
-    navigate(id, 'network', 'gm');
+    navigate(id, DEFAULT_VIEW, 'gm');
   };
 
   return (
@@ -55,7 +56,7 @@ function Home() {
             <ul class="recent">
               {recent.map((r) => (
                 <li key={r.id}>
-                  <a href={hrefFor(r.id, 'network', r.role ?? 'player')}>{r.name || 'Unnamed Crew'}</a>
+                  <a href={hrefFor(r.id, DEFAULT_VIEW, r.role ?? 'player')}>{r.name || 'Unnamed Crew'}</a>
                   {r.role === 'gm' && <span class="when">GM</span>}
                   <span class="when">{new Date(r.at).toLocaleDateString()}</span>
                   <button
@@ -110,12 +111,12 @@ function Campaign({ campaignId, view, role }: { campaignId: string; view: ViewId
     const on = (e: KeyboardEvent) => {
       if (isTyping(e.target)) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      const v = VIEWS.find((x) => x.key === e.key);
+      const v = visibleViews(role).find((x) => x.key === e.key);
       if (v) navigate(campaignId, v.id);
     };
     window.addEventListener('keydown', on);
     return () => window.removeEventListener('keydown', on);
-  }, [campaignId]);
+  }, [campaignId, role]);
 
   if (ledger === undefined) {
     return (
@@ -158,11 +159,12 @@ function Campaign({ campaignId, view, role }: { campaignId: string; view: ViewId
       <div class="app">
         <Header campaignId={campaignId} view={view} />
         <div class="view">
-          {view === 'network' && <TableView />}
           {view === 'play' && <SceneView />}
           {view === 'sheets' && <SheetsView />}
+          {view === 'references' && <ReferencesView />}
+          {view === 'network' && <TableView />}
           {view === 'sparks' && <SparksView />}
-          {view === 'tools' && <PlayView />}
+          {view === 'tools' && role === 'gm' && <PlayView />}
         </div>
         <RollTicker />
       </div>
@@ -240,7 +242,7 @@ function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
         onInput={(e) => update({ 'crew/name': (e.currentTarget as HTMLInputElement).value })}
       />
       <nav class="tabs">
-        {VIEWS.map((v) => (
+        {visibleViews(role).map((v) => (
           <button key={v.id} class={v.id === view ? 'active' : ''} onClick={() => navigate(campaignId, v.id)} title={`key ${v.key}`}>
             {v.label}
           </button>
@@ -347,7 +349,7 @@ function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
                   rememberCampaign(id, l.crew.name, 'gm');
                   s.close();
                   setConfirmNew(false);
-                  navigate(id, 'network', 'gm');
+                  navigate(id, DEFAULT_VIEW, 'gm');
                 }}
               >
                 START
