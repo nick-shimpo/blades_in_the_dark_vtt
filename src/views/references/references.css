@@ -1,0 +1,422 @@
+/* References view: same frame as the Sheets view (rail + scrolling panel), panel vocabulary from sheets.css. Tokens from src/styles/tokens.css. */
+
+.refs {
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  font-family: var(--font-sheet);
+  font-size: 15px;
+  color: var(--ink);
+}
+.refs b {
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------ rail */
+
+.rf-rail {
+  width: 224px;
+  flex: none;
+  border-right: 1px solid var(--ink);
+  background: var(--sheet-rail);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 10px;
+  padding-bottom: 12px;
+}
+.rf-rail-label {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 3px;
+  padding: 12px 14px 0;
+  color: var(--muted);
+}
+.rf-rail-label + .rf-rail-label {
+  padding-top: 0;
+}
+.rf-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  width: 176px;
+  margin: 0 auto;
+  padding: 2px 0 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  text-align: center;
+  flex: none;
+}
+.rf-entry:hover {
+  background: transparent;
+}
+.rf-thumb {
+  display: block;
+  width: 176px;
+  height: 110px;
+  border: 1px solid var(--ink);
+  background: var(--paper-light);
+  box-shadow: 3px 3px 0 rgba(34, 28, 19, 0.18);
+  overflow: hidden;
+  position: relative;
+  flex: none;
+}
+.rf-entry:hover .rf-thumb {
+  background: var(--paper-hover);
+}
+.rf-entry.is-on .rf-thumb {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+/* live miniature: the sheet rendered at a fixed 880 px and scaled to fit the box */
+.rf-mini {
+  display: block;
+  width: 880px;
+  transform: scale(0.2);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+.rf-mini .rf-sheet {
+  background: var(--paper);
+  min-height: 550px;
+}
+.rf-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.rf-thumb-note {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--muted);
+}
+.rf-entry-label {
+  font-family: var(--font-title);
+  font-size: 15px;
+  line-height: 1.2;
+  padding: 2px 8px;
+  text-wrap: balance;
+}
+.rf-entry.is-on .rf-entry-label {
+  background: var(--ink);
+  color: var(--paper);
+}
+.rf-rail-spacer {
+  flex: 1;
+}
+.rf-rail-attrib {
+  padding: 10px 14px 0;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------------ main panel */
+
+.rf-main {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  position: relative;
+  background: var(--paper);
+}
+
+/* ------------------------------------------------------------ a built sheet */
+
+.rf-sheet {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 32px 48px;
+}
+.rf-band {
+  margin-bottom: 18px;
+}
+.rf-band h2 {
+  font-family: var(--font-stencil);
+  font-weight: 800;
+  font-size: 34px;
+  line-height: 1;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
+}
+.rf-sub {
+  font-style: italic;
+  font-size: 16px;
+  color: var(--muted);
+  margin: 6px 0 0;
+  text-wrap: pretty;
+}
+.rf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+.rf-panel {
+  border: 1px solid var(--ink);
+  background: var(--paper-light);
+  box-shadow: 3px 3px 0 rgba(34, 28, 19, 0.18);
+  min-width: 0;
+}
+.rf-panel.wide {
+  grid-column: 1 / -1;
+}
+.rf-bar {
+  background: var(--sheet-bar);
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 2.5px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.rf-bar-note {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.rf-body {
+  padding: 10px 12px 12px;
+  font-size: 15.5px;
+  line-height: 1.4;
+}
+.rf-body p {
+  margin: 0 0 8px;
+  text-wrap: pretty;
+}
+.rf-body p:last-child {
+  margin-bottom: 0;
+}
+.rf-body .rf-note {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  font-style: italic;
+  color: var(--muted);
+}
+.rf-label {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 10px 0 2px;
+}
+.rf-em {
+  color: var(--red);
+  font-weight: 700;
+}
+.rf-num {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--red);
+}
+
+/* dotted key / text rows */
+.rf-rows {
+  display: flex;
+  flex-direction: column;
+}
+.rf-rows + .rf-rows {
+  margin-top: 8px;
+}
+.rf-row {
+  display: grid;
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+  gap: 0 12px;
+  padding: 5px 0;
+  border-bottom: 1px dotted rgba(34, 28, 19, 0.3);
+}
+.rf-row:last-child {
+  border-bottom: 0;
+}
+.rf-row-k {
+  font-weight: 700;
+  max-width: 190px;
+}
+.rf-row-t {
+  min-width: 0;
+  text-wrap: pretty;
+}
+.rf-two-col {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0 24px;
+  margin-top: 10px;
+}
+
+/* tables */
+.rf-table-wrap {
+  overflow-x: auto;
+}
+.rf-table-wrap + .rf-rows,
+.rf-table-wrap + .rf-table-wrap {
+  margin-top: 8px;
+}
+.rf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+}
+.rf-table th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 8px 6px;
+  border-bottom: 1px solid var(--ink);
+  vertical-align: bottom;
+}
+.rf-table th:first-child,
+.rf-table td:first-child {
+  padding-left: 0;
+}
+.rf-table td {
+  padding: 6px 8px;
+  border-bottom: 1px dotted rgba(34, 28, 19, 0.3);
+  vertical-align: top;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+.rf-table tr:last-child td {
+  border-bottom: 0;
+}
+.rf-table td.k {
+  font-weight: 700;
+}
+.rf-outcomes td.k {
+  min-width: 130px;
+}
+.rf-pos {
+  display: block;
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.rf-pos-line {
+  display: block;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* numbered steps, plain lists */
+.rf-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: step;
+}
+.rf-steps li {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 5px 0;
+  border-bottom: 1px dotted rgba(34, 28, 19, 0.3);
+}
+.rf-steps li:last-child {
+  border-bottom: 0;
+}
+.rf-steps li::before {
+  counter-increment: step;
+  content: counter(step);
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--red);
+  min-width: 18px;
+  flex: none;
+}
+.rf-list {
+  margin: 0;
+  padding-left: 18px;
+}
+.rf-list li {
+  padding: 2px 0;
+  text-wrap: pretty;
+}
+.rf-foot {
+  margin-top: 20px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------ image handouts */
+
+.rf-figure {
+  margin: 0;
+  padding: 24px 32px 48px;
+  text-align: center;
+}
+.rf-figure img {
+  display: inline-block;
+  border: 1px solid var(--ink);
+  background: var(--paper-light);
+  box-shadow: 3px 3px 0 rgba(34, 28, 19, 0.18);
+}
+.rf-figure img.is-fit {
+  max-width: 100%;
+  max-height: calc(100vh - 140px);
+  width: auto;
+  height: auto;
+  cursor: zoom-in;
+}
+.rf-figure img.is-natural {
+  max-width: none;
+  max-height: none;
+  cursor: zoom-out;
+}
+.rf-figure figcaption {
+  margin-top: 8px;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--muted);
+}
+.rf-missing {
+  margin: 0;
+  padding: 40px 32px;
+  font-size: 15px;
+  font-style: italic;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.rf-missing code {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 13px;
+}
