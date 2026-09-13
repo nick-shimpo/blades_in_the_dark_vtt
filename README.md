@@ -1,6 +1,6 @@
 # Doskvol Table
 
-A shared virtual tabletop for one *Blades in the Dark* campaign: a pan-and-zoom map of factions, people and places with clocks and relationships, interactive character and crew sheets with the rules wired in, GM spark tables, and a play reference. Built for one GM and a few friends playing online together.
+A shared virtual tabletop for one *Blades in the Dark* campaign: a pan-and-zoom map of factions, people and places with clocks and relationships (Table), a live surface of big clocks and index cards for the moment of play that is swept between scores (Scene), interactive character and crew sheets with the rules wired in (Sheets), GM spark tables (Sparks), and a play reference (Play). Built for one GM and a few friends playing online together.
 
 Live at **https://nick-shimpo.github.io/blades_in_the_dark_vtt/**
 
@@ -9,7 +9,7 @@ Live at **https://nick-shimpo.github.io/blades_in_the_dark_vtt/**
 - A campaign lives at `#/c/<random id>`. The link is the only key: whoever has it can read and edit. Share it with your players, keep it out of public places.
 - Everything a table changes is one JSON document, the **ledger**. It is stored in a Firebase Realtime Database and pushed live to every open browser. Without a Firebase config the app keeps the ledger in the browser's localStorage instead (local mode).
 - The ☰ menu exports and imports ledgers as `.ledger.json`, in the same shape the original prototype used, so files move both ways.
-- No accounts, no roles, no server code of ours. See `docs/decisions/0001-architecture.md` for why.
+- No accounts, no roles, no server code of ours, and no file uploads. See `docs/decisions/` for why.
 
 ## Develop
 
@@ -42,8 +42,9 @@ src/data/        bundled game content (book, sheets, sparks, claims maps) + type
 src/ledger/      ledger types, blank documents, import/export, rules engine, tests
 src/sync/        store interface, local adapter, Firebase adapter
 src/ui/          context, hash routing
-src/views/       table, sheets, sparks, play
+src/views/       table, scene, sheets, sparks, play
 design/handoff/  the Claude Design handover: prototype, docs, data, source pack
+design/handoff-scene/  the second handover: the Scene view
 docs/            decisions, Firebase rules
 ```
 

@@ -1,0 +1,275 @@
+/* Scene view: the fixed 1440 × 810 shared surface, clock and index-card items, the radial menu.
+   Values follow design/handoff-scene/README.md and Scene.dc.html; tokens from tokens.css.
+   Hover states are colour-only; shadows are hard offsets; only the dial and radial buttons are round. */
+
+/* ------------------------------------------------------------ surface */
+
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-image: radial-gradient(rgba(34, 28, 19, 0.14) 1px, transparent 1px);
+  background-size: 26px 26px;
+  user-select: none;
+  touch-action: none;
+  cursor: default;
+}
+.scene-world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+.scene-item {
+  position: absolute;
+  cursor: move;
+  z-index: 2;
+}
+.scene-item.sel {
+  z-index: 5;
+}
+
+/* ------------------------------------------------------------ clock item */
+
+.scene-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.scene-dial {
+  display: block;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  padding: 0;
+  flex: none;
+  cursor: pointer;
+}
+.scene-clock-name {
+  font-family: var(--font-body);
+  font-size: 22px;
+  line-height: 1.15;
+  text-align: center;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+  cursor: text;
+  padding: 0 4px;
+  min-height: 25px;
+  color: var(--ink);
+}
+.scene-clock-name.full {
+  color: var(--red);
+}
+.scene-clock-name-edit {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 22px;
+  line-height: 1.15;
+  text-align: center;
+  background: rgba(255, 250, 235, 0.6);
+  border: 1px solid var(--red);
+  padding: 2px 5px;
+  resize: none;
+  color: var(--ink);
+  outline: none;
+}
+.scene-clock-ctl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.scene-clock-btn {
+  width: 30px;
+  height: 24px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0;
+}
+.scene-clock-btn.minus {
+  opacity: 0.75;
+}
+.scene-clock-btn.minus:hover {
+  opacity: 1;
+  background: var(--ink);
+  color: var(--paper-light);
+}
+.scene-clock-btn.plus:hover {
+  background: var(--red);
+  color: var(--paper-light);
+  border-color: var(--red);
+}
+.scene-count {
+  border: none;
+  background: transparent;
+  padding: 0 2px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--ink);
+}
+.scene-count:hover {
+  background: transparent;
+}
+.scene-count.full {
+  color: var(--red);
+}
+
+/* ------------------------------------------------------------ index card item */
+
+.scene-card {
+  background: var(--paper-light);
+  border: 1px solid var(--ink);
+  box-shadow: 4px 4px 0 rgba(34, 28, 19, 0.28);
+  display: flex;
+  flex-direction: column;
+}
+.scene-card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 14px 6px;
+  border-bottom: 2px solid var(--red);
+}
+.scene-card-type {
+  border: 0;
+  background: transparent;
+  padding: 0 2px;
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0.7;
+  color: var(--ink);
+}
+.scene-card-type:hover {
+  opacity: 1;
+  background: transparent;
+}
+.scene-card-title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-title);
+  font-size: 21px;
+  line-height: 1.05;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  outline: none;
+  color: var(--ink);
+}
+.scene-card-title::placeholder {
+  color: var(--faint);
+  opacity: 1;
+}
+.scene-card-body {
+  display: block;
+  width: 100%;
+  min-height: 104px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 26px;
+  padding: 0 14px;
+  margin: 6px 0 12px;
+  background: repeating-linear-gradient(to bottom, transparent 0 25px, rgba(34, 28, 19, 0.16) 25px 26px);
+  border: 0;
+  outline: none;
+  resize: none;
+  color: var(--ink);
+  field-sizing: content;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------ armed-for-removal tag */
+
+.scene-armed {
+  position: absolute;
+  left: 50%;
+  bottom: -30px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  border: 1px solid var(--red);
+  background: var(--red);
+  color: var(--paper-light);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 4px 10px;
+  box-shadow: 2px 2px 0 rgba(34, 28, 19, 0.3);
+}
+.scene-armed:hover {
+  background: var(--red-hover);
+}
+
+/* ------------------------------------------------------------ radial menu
+   Same rules as src/views/table/table.css: the RadialMenu component is shared, but its styles
+   only load with the Table view, and a player may open the Scene first. */
+
+.radial {
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: 40;
+}
+.radial-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed rgba(34, 28, 19, 0.5);
+  pointer-events: none;
+}
+.radial-dot {
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.radial-btn {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: var(--paper-light);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 rgba(34, 28, 19, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.radial-btn span {
+  font-size: 18px;
+  line-height: 1;
+}
+.radial-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.radial-btn.danger {
+  border-color: var(--red);
+  color: var(--red);
+}
+.radial-btn.danger:hover {
+  background: var(--red);
+  color: var(--paper-light);
+}
+.radial-label {
+  position: absolute;
+  width: 92px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  line-height: 14px;
+  color: var(--ink);
+  background: rgba(231, 223, 201, 0.85);
+  pointer-events: none;
+}
