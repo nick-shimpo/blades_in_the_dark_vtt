@@ -68,7 +68,7 @@ export function BookDialog({ nodes, tab, onTab, onPick, onNew, onClose }: BookDi
             <span class="c1">{r.c1}</span>
             <span class="c2">{r.c2}</span>
             <span class="c3">{r.c3}</span>
-            <span class={`a${r.node ? ' on' : ''}`}>{r.node ? 'ON TABLE' : '+ ADD'}</span>
+            <span class={`a${r.node ? ' on' : ''}`}>{r.node ? 'ON NETWORK' : '+ ADD'}</span>
           </button>
         ))}
         {rows.length === 0 && <div class="book-empty">Nothing in the book matches.</div>}

@@ -1,12 +1,12 @@
 # Doskvol Table
 
-A shared virtual tabletop for one *Blades in the Dark* campaign: a pan-and-zoom map of factions, people and places with clocks and relationships (Table), a live surface of big clocks and index cards for the moment of play that is swept between scores (Scene), interactive character and crew sheets with the rules wired in (Sheets), GM spark tables (Sparks), and a play reference (Play). Built for one GM and a few friends playing online together.
+A shared virtual tabletop for one *Blades in the Dark* campaign: a pan-and-zoom map of factions, people and places with clocks and relationships (Network), a live surface of big clocks and index cards for the moment of play that is swept between scores (Play), interactive character and crew sheets with the rules wired in (Sheets), GM spark tables (Sparks), and a play reference (Tools). Built for one GM and a few friends playing online together.
 
 Live at **https://nick-shimpo.github.io/blades_in_the_dark_vtt/**
 
 ## How it works
 
-- A campaign lives at `#/c/<random id>`. The link is the only key: whoever has it can read and edit. Share it with your players, keep it out of public places.
+- A campaign has two links: the player link `#/c/<random id>` and the GM link `#/gm/<random id>`. Either is the only key: whoever has it can read and edit. The GM link is not a login, just a slightly different screen (for now: progress clocks on the Network are GM-only). Share the player link with your players, keep both out of public places.
 - Everything a table changes is one JSON document, the **ledger**. It is stored in a Firebase Realtime Database and pushed live to every open browser. Without a Firebase config the app keeps the ledger in the browser's localStorage instead (local mode).
 - The ☰ menu exports and imports ledgers as `.ledger.json`, in the same shape the original prototype used, so files move both ways.
 - No accounts, no roles, no server code of ours, and no file uploads. See `docs/decisions/` for why.

@@ -311,7 +311,7 @@ function FactionFinder({
             {fp.hold ? ` ${fp.hold.toUpperCase()}` : ''} · {String(fp.summary ?? '').slice(0, 90)}
           </span>
           <button class="pick-add" onClick={() => onAdd(fp)}>
-            {flashAdd === fp.id ? 'ADDED ✓' : isOnTable(fp.id) ? 'ON TABLE' : '+ ADD TO TABLE'}
+            {flashAdd === fp.id ? 'ADDED ✓' : isOnTable(fp.id) ? 'ON NETWORK' : '+ ADD TO NETWORK'}
           </button>
         </div>
       )}
@@ -326,7 +326,7 @@ function FactionFinder({
             </span>
             <span class="fd">{String(f.summary ?? '').slice(0, 72)}</span>
             <button class="frow-add" title="Add to the table" onClick={() => onAdd(f)}>
-              {flashAdd === f.id ? '✓' : isOnTable(f.id) ? 'ON TABLE' : '+ TABLE'}
+              {flashAdd === f.id ? '✓' : isOnTable(f.id) ? 'ON NETWORK' : '+ NETWORK'}
             </button>
           </div>
         ))}

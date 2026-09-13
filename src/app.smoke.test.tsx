@@ -35,7 +35,7 @@ beforeAll(() => {
   if (!svgProto.getBBox) svgProto.getBBox = () => ({ x: 0, y: 0, width: 0, height: 0 }) as DOMRect;
 });
 
-function mountWith(View: () => JSX.Element) {
+function mountWith(View: () => JSX.Element, role: 'gm' | 'player' = 'gm') {
   const ledger = importLedger(JSON.stringify(example))!;
   const store = createStore('smoketestcampaign0001');
   store.replace(ledger);
@@ -49,6 +49,7 @@ function mountWith(View: () => JSX.Element) {
     store,
     status: { state: 'saved', live: false, mode: 'local' },
     rolls: [],
+    role,
     update: (p) => store.update(p),
     replace: (l) => store.replace(l),
     pushRoll: () => {},
@@ -73,6 +74,19 @@ describe('views mount against the example ledger', () => {
     expect(text).toContain('Bazso Baz');
     expect(text).toContain('Find the thieves');
     unmount();
+  });
+
+  it('Network hides clocks from players but not from the GM', () => {
+    const gm = mountWith(TableView, 'gm');
+    expect(gm.host.textContent).toContain('Find the thieves');
+    expect(gm.host.textContent).toContain('+ CLOCK');
+    gm.unmount();
+    const player = mountWith(TableView, 'player');
+    expect(player.errors).toEqual([]);
+    expect(player.host.textContent).toContain('The Red Sashes');
+    expect(player.host.textContent).not.toContain('Find the thieves');
+    expect(player.host.textContent).not.toContain('+ CLOCK');
+    player.unmount();
   });
 
   it('Sheets renders the rail with the crew and the character', () => {

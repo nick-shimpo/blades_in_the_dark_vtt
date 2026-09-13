@@ -46,7 +46,7 @@ export interface DossierProps {
 
 /** The dossier modal (design/handoff/README.md, "Dossier"). Every edit is written straight to the ledger. */
 export function Dossier({ node, crewTypeName, armed, onArm, onDelete, onStartLink, onClose }: DossierProps) {
-  const { ledger, update, saveNode } = useLedger();
+  const { ledger, update, saveNode, role } = useLedger();
   const [editKey, setEditKey] = useState<string | null>(null);
   const [newName, setNewName] = useState('');
   const [newSize, setNewSize] = useState(6);
@@ -177,7 +177,7 @@ export function Dossier({ node, crewTypeName, armed, onArm, onDelete, onStartLin
             </div>
           </div>
         )}
-        <div class="dossier-sec">
+        <div class="dossier-sec" style={role === 'gm' ? undefined : { display: 'none' }}>
           <div class="dossier-sec-title">CLOCKS</div>
           {clocks.map((c) => (
             <div key={c.id} class="dossier-clock">

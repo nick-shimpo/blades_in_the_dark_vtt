@@ -60,6 +60,7 @@ function mountScene() {
     rolls: [],
     update: (p) => store.update(p),
     replace: (l) => store.replace(l),
+    role: 'gm',
     pushRoll: () => {},
   });
   render(

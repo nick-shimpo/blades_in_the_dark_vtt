@@ -34,11 +34,13 @@ export interface CardProps {
   selected: boolean;
   armed: boolean;
   focusClock: string | null;
+  /** Clocks are GM-only on the Network view; players get cards without the clocks block. */
+  showClocks?: boolean;
   h: CardHandlers;
 }
 
 /** One Table card (design/handoff/README.md, "Card"). */
-export function Card({ node, width, height, name, tier, line, selected, armed, focusClock, h }: CardProps) {
+export function Card({ node, width, height, name, tier, line, selected, armed, focusClock, showClocks = true, h }: CardProps) {
   const isCrew = node.type === 'crew';
   const st = Math.max(-3, Math.min(3, node.status));
   const tw = tierWeight(tier);
@@ -98,6 +100,7 @@ export function Card({ node, width, height, name, tier, line, selected, armed, f
         </div>
         <div class="card-name">{name}</div>
         {line && <div class="card-line">{line}</div>}
+        {showClocks && (
         <div class="card-clocks">
           {clocks.map((c) => (
             <ClockRow key={c.id} node={node} clock={c} editing={focusClock === c.id} h={h} />
@@ -114,6 +117,7 @@ export function Card({ node, width, height, name, tier, line, selected, armed, f
             ◔ + CLOCK
           </button>
         </div>
+        )}
         {showBand && (
           <button
             type="button"

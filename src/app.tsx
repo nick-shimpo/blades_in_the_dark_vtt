@@ -4,7 +4,7 @@ import { newCampaignId } from './ledger/ids';
 import { blankLedger, exportLedger, importLedger } from './ledger/normalize';
 import type { Ledger, RollRecord } from './ledger/types';
 import { createStore, firebaseAvailable, forgetCampaign, recentCampaigns, rememberCampaign, type Store, type StoreStatus } from './sync';
-import { LedgerContext, makeLedgerApi, useLedger, VIEWS, type ViewId } from './ui/context';
+import { LedgerContext, makeLedgerApi, useLedger, VIEWS, type Role, type ViewId } from './ui/context';
 import { BOOK_EVENT, FIT_EVENT, HINT_EVENT, SWEEP_EVENT, SWEEP_STATE_EVENT, isTyping, setHint } from './ui/events';
 import { RollTicker } from './ui/RollTicker';
 import { campaignLink, hrefFor, navigate, useRoute } from './ui/route';
@@ -19,7 +19,7 @@ import { TableView } from './views/table';
 export function App() {
   const route = useRoute();
   if (!route.campaignId) return <Home />;
-  return <Campaign key={route.campaignId} campaignId={route.campaignId} view={route.view} />;
+  return <Campaign key={route.campaignId} campaignId={route.campaignId} view={route.view} role={route.role} />;
 }
 
 // ---------------------------------------------------------------- home
@@ -32,9 +32,9 @@ function Home() {
     const id = newCampaignId();
     const store = createStore(id);
     store.replace(ledger);
-    rememberCampaign(id, ledger.crew.name);
+    rememberCampaign(id, ledger.crew.name, 'gm');
     store.close();
-    navigate(id);
+    navigate(id, 'network', 'gm');
   };
 
   return (
@@ -55,7 +55,8 @@ function Home() {
             <ul class="recent">
               {recent.map((r) => (
                 <li key={r.id}>
-                  <a href={hrefFor(r.id)}>{r.name || 'Unnamed Crew'}</a>
+                  <a href={hrefFor(r.id, 'network', r.role ?? 'player')}>{r.name || 'Unnamed Crew'}</a>
+                  {r.role === 'gm' && <span class="when">GM</span>}
                   <span class="when">{new Date(r.at).toLocaleDateString()}</span>
                   <button
                     class="ghost"
@@ -82,7 +83,7 @@ function Home() {
 
 // ---------------------------------------------------------------- campaign
 
-function Campaign({ campaignId, view }: { campaignId: string; view: ViewId }) {
+function Campaign({ campaignId, view, role }: { campaignId: string; view: ViewId; role: Role }) {
   const store = useMemo<Store>(() => createStore(campaignId), [campaignId]);
   const [ledger, setLedger] = useState<Ledger | null | undefined>(undefined);
   const [status, setStatus] = useState<StoreStatus>({ state: 'connecting', live: false, mode: store.mode });
@@ -101,8 +102,8 @@ function Campaign({ campaignId, view }: { campaignId: string; view: ViewId }) {
   }, [store]);
 
   useEffect(() => {
-    if (ledger) rememberCampaign(campaignId, ledger.crew.name);
-  }, [campaignId, ledger?.crew.name]);
+    if (ledger) rememberCampaign(campaignId, ledger.crew.name, role);
+  }, [campaignId, ledger?.crew.name, role]);
 
   // keys 1–4 switch views when not typing
   useEffect(() => {
@@ -146,6 +147,7 @@ function Campaign({ campaignId, view }: { campaignId: string; view: ViewId }) {
     store,
     status,
     rolls,
+    role,
     update: (p) => store.update(p),
     replace: (l) => store.replace(l),
     pushRoll: (r) => store.pushRoll(r),
@@ -156,11 +158,11 @@ function Campaign({ campaignId, view }: { campaignId: string; view: ViewId }) {
       <div class="app">
         <Header campaignId={campaignId} view={view} />
         <div class="view">
-          {view === 'table' && <TableView />}
-          {view === 'scene' && <SceneView />}
+          {view === 'network' && <TableView />}
+          {view === 'play' && <SceneView />}
           {view === 'sheets' && <SheetsView />}
           {view === 'sparks' && <SparksView />}
-          {view === 'play' && <PlayView />}
+          {view === 'tools' && <PlayView />}
         </div>
         <RollTicker />
       </div>
@@ -171,7 +173,7 @@ function Campaign({ campaignId, view }: { campaignId: string; view: ViewId }) {
 // ---------------------------------------------------------------- header
 
 function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
-  const { ledger, update, status } = useLedger();
+  const { ledger, update, status, role } = useLedger();
   const [hint, setHintState] = useState('');
   const [menu, setMenu] = useState(false);
   const [paste, setPaste] = useState(false);
@@ -201,16 +203,20 @@ function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
     setMenu(false);
   }, [ledger]);
 
-  const copyLink = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(campaignLink(campaignId));
-      setHint('link copied · send it to your players');
-      setTimeout(() => setHint(''), 2500);
-    } catch {
-      window.prompt('Copy this link', campaignLink(campaignId));
-    }
-    setMenu(false);
-  }, [campaignId]);
+  const copyLink = useCallback(
+    async (which: Role) => {
+      const link = campaignLink(campaignId, which);
+      try {
+        await navigator.clipboard.writeText(link);
+        setHint(which === 'gm' ? 'GM link copied · keep this one for yourself' : 'player link copied · send it to your players');
+        setTimeout(() => setHint(''), 2500);
+      } catch {
+        window.prompt('Copy this link', link);
+      }
+      setMenu(false);
+    },
+    [campaignId],
+  );
 
   const copyLedger = useCallback(async () => {
     try {
@@ -242,12 +248,12 @@ function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
       </nav>
       <div class="hdr-hint">{hint}</div>
       <div class="hdr-spacer" />
-      {view === 'scene' && (
+      {view === 'play' && (
         <button class={sweepArmed ? 'red book' : 'fit'} title="clear the scene" onClick={() => window.dispatchEvent(new CustomEvent(SWEEP_EVENT))}>
           SWEEP
         </button>
       )}
-      {view === 'table' && (
+      {view === 'network' && (
         <>
           <button class="fit" onClick={() => window.dispatchEvent(new CustomEvent(FIT_EVENT))}>
             FIT
@@ -266,12 +272,17 @@ function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
         {menu && (
           <div class="menu" onMouseLeave={() => setMenu(false)}>
             <div class="menu-head">
-              <div class="label">LEDGER</div>
+              <div class="label">LEDGER · {role === 'gm' ? 'GM LINK' : 'PLAYER LINK'}</div>
               <div class={`status${status.state === 'error' || status.state === 'offline' ? ' warn' : ''}`}>{statusText}</div>
             </div>
-            <button class="row" onClick={copyLink}>
-              Copy campaign link
+            <button class="row" onClick={() => copyLink('player')}>
+              Copy player link
             </button>
+            {role === 'gm' && (
+              <button class="row" onClick={() => copyLink('gm')}>
+                Copy GM link
+              </button>
+            )}
             <div class="sep" />
             <button class="row" onClick={exportCopy}>
               Export a copy…
@@ -333,10 +344,10 @@ function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
                   const s = createStore(id);
                   const l = blankLedger();
                   s.replace(l);
-                  rememberCampaign(id, l.crew.name);
+                  rememberCampaign(id, l.crew.name, 'gm');
                   s.close();
                   setConfirmNew(false);
-                  navigate(id);
+                  navigate(id, 'network', 'gm');
                 }}
               >
                 START

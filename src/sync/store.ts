@@ -86,6 +86,8 @@ export interface RecentCampaign {
   id: string;
   name: string;
   at: number;
+  /** Which link this browser last used for the campaign; 'gm' is remembered once seen. */
+  role?: 'gm' | 'player';
 }
 const RECENT_KEY = 'doskvol-table:recent';
 
@@ -99,10 +101,11 @@ export function recentCampaigns(): RecentCampaign[] {
   }
 }
 
-export function rememberCampaign(id: string, name: string): void {
+export function rememberCampaign(id: string, name: string, role: 'gm' | 'player' = 'player'): void {
   try {
+    const prev = recentCampaigns().find((r) => r.id === id);
     const list = recentCampaigns().filter((r) => r.id !== id);
-    list.unshift({ id, name, at: Date.now() });
+    list.unshift({ id, name, at: Date.now(), role: role === 'gm' || prev?.role === 'gm' ? 'gm' : 'player' });
     localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 12)));
   } catch {
     /* storage unavailable */

@@ -169,7 +169,7 @@ export function SceneView() {
     const name = k.title.trim() || 'Untitled card';
     addCustomNode(a, k.type, name, crew ? { x: crew.x, y: crew.y } : undefined, { notes: k.body });
     remove(id);
-    showFlash(`${name} moved to the Table`);
+    showFlash(`${name} moved to the Network`);
   };
 
   // ---- SWEEP: the header button dispatches; the Scene owns the two-step and tells the header when it is armed
@@ -376,7 +376,7 @@ export function SceneView() {
             { glyph: '✕', label: 'REMOVE', danger: true, act: arm(target.id) },
           ]
         : [
-            { glyph: '⤢', label: 'TO TABLE', act: () => toTable(target.id) },
+            { glyph: '⤢', label: 'TO NETWORK', act: () => toTable(target.id) },
             { glyph: '✕', label: 'REMOVE', danger: true, act: arm(target.id) },
           ];
 

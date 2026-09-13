@@ -82,6 +82,7 @@ const HINT_ARMED = 'remove this card? click the red tag or press ⌫ again · es
 
 export function TableView() {
   const api = useLedger();
+  const showClocks = api.role === 'gm'; // decision 0003: Network clocks are GM-only
   const { ledger } = api;
   const canvasRef = useRef<HTMLDivElement>(null);
 
@@ -509,7 +510,7 @@ export function TableView() {
                 },
               ]
             : []),
-          { glyph: '◔', label: 'CLOCK', act: () => addClockTo(radialNode.id, true) },
+          ...(showClocks ? [{ glyph: '◔', label: 'CLOCK', act: () => addClockTo(radialNode.id, true) }] : []),
           {
             glyph: '✕',
             label: 'REMOVE',
@@ -600,6 +601,7 @@ export function TableView() {
                 selected={sel === n.id}
                 armed={sel === n.id && armed && !dossier}
                 focusClock={focusClock}
+                showClocks={showClocks}
                 h={cardHandlers}
               />
             );

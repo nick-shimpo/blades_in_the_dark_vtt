@@ -8,6 +8,8 @@ export interface LedgerApi {
   store: Store;
   status: StoreStatus;
   rolls: RollRecord[];
+  /** 'gm' when opened through the GM link, otherwise 'player'. */
+  role: Role;
   /** Low-level: write a patch of ledger-relative paths. */
   update(patch: Patch): void;
   /** Replace the whole ledger (import, new campaign). */
@@ -47,11 +49,21 @@ export function makeLedgerApi(base: Omit<LedgerApi, 'saveChar' | 'saveCrew' | 's
   };
 }
 
-export type ViewId = 'table' | 'scene' | 'sparks' | 'play' | 'sheets';
+/**
+ * Views. The ids are the URL segments; the folders under src/views keep their original names
+ * (network = views/table, play = views/scene, tools = views/play).
+ */
+export type ViewId = 'network' | 'play' | 'sparks' | 'tools' | 'sheets';
 export const VIEWS: { id: ViewId; label: string; key: string }[] = [
-  { id: 'table', label: 'Table', key: '1' },
-  { id: 'scene', label: 'Scene', key: '2' },
+  { id: 'network', label: 'Network', key: '1' },
+  { id: 'play', label: 'Play', key: '2' },
   { id: 'sparks', label: 'Sparks', key: '3' },
-  { id: 'play', label: 'Play', key: '4' },
+  { id: 'tools', label: 'Tools', key: '4' },
   { id: 'sheets', label: 'Sheets', key: '5' },
 ];
+
+/**
+ * Who is looking: decided by the URL alone (`#/gm/<id>` vs `#/c/<id>`), no authentication.
+ * The GM link is a courtesy split, not a secret: anyone who knows the pattern can open it.
+ */
+export type Role = 'gm' | 'player';
