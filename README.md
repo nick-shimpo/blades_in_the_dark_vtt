@@ -10,6 +10,7 @@ Live at **https://nick-shimpo.github.io/blades_in_the_dark_vtt/**
 - Everything a table changes is one JSON document, the **ledger**. It is stored in a Firebase Realtime Database and pushed live to every open browser. Without a Firebase config the app keeps the ledger in the browser's localStorage instead (local mode).
 - The ☰ menu exports and imports ledgers as `.ledger.json`, in the same shape the original prototype used, so files move both ways.
 - No accounts, no roles, no server code of ours, and no file uploads. See `docs/decisions/` for why.
+- On a phone or tablet (viewport 1024 px or narrower) the app switches to a **compact layout** with just Sheets, References and Dice; the canvases need a desktop. The ☰ menu can force the layout either way.
 
 ## Develop
 

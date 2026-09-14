@@ -55,12 +55,14 @@ export function makeLedgerApi(base: Omit<LedgerApi, 'saveChar' | 'saveCrew' | 's
  * original names (network = views/table, play = views/scene, tools = views/play = "GM Notes").
  * Keys 1..n are assigned by visible position, so players and the GM both count from 1.
  */
-export type ViewId = 'play' | 'sheets' | 'references' | 'network' | 'sparks' | 'tools';
+export type ViewId = 'play' | 'sheets' | 'references' | 'network' | 'sparks' | 'tools' | 'dice';
 export interface ViewDef {
   id: ViewId;
   label: string;
   /** Only shown (and reachable) on the GM link. */
   gmOnly?: boolean;
+  /** Only shown in the compact (phone / tablet) layout. */
+  compactOnly?: boolean;
 }
 export const VIEWS: ViewDef[] = [
   { id: 'play', label: 'Play' },
@@ -69,12 +71,24 @@ export const VIEWS: ViewDef[] = [
   { id: 'network', label: 'Network' },
   { id: 'sparks', label: 'Sparks' },
   { id: 'tools', label: 'GM Notes', gmOnly: true },
+  { id: 'dice', label: 'Dice', compactOnly: true },
 ];
 export const DEFAULT_VIEW: ViewId = 'play';
+/** What a phone or tablet gets (decision 0005). */
+export const COMPACT_VIEWS: ViewId[] = ['sheets', 'references', 'dice'];
+export const DEFAULT_COMPACT_VIEW: ViewId = 'sheets';
 
-/** The tabs this role can see, with their keyboard shortcut. */
-export function visibleViews(role: Role): (ViewDef & { key: string })[] {
-  return VIEWS.filter((v) => !v.gmOnly || role === 'gm').map((v, i) => ({ ...v, key: String(i + 1) }));
+/** The tabs this role can see in this layout, with their keyboard shortcut. */
+export function visibleViews(role: Role, compact = false): (ViewDef & { key: string })[] {
+  const list = compact
+    ? COMPACT_VIEWS.map((id) => VIEWS.find((v) => v.id === id)!)
+    : VIEWS.filter((v) => !v.compactOnly && (!v.gmOnly || role === 'gm'));
+  return list.map((v, i) => ({ ...v, key: String(i + 1) }));
+}
+
+/** The view actually rendered: compact mode falls back to Sheets for anything it does not carry. */
+export function effectiveView(view: ViewId, compact: boolean): ViewId {
+  return compact && !COMPACT_VIEWS.includes(view) ? DEFAULT_COMPACT_VIEW : view;
 }
 
 /**

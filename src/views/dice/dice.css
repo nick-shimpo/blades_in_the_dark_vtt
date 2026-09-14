@@ -1,0 +1,33 @@
+/* Dice view: the Play view's tray, full width. */
+.dice-page {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--paper);
+}
+.dice-page .dice-tray {
+  width: min(560px, 100%);
+  border-left: 1px solid var(--ink);
+  border-right: 1px solid var(--ink);
+}
+.dice-page .tray-die {
+  width: 52px;
+  height: 52px;
+  font-size: 30px;
+}
+.dice-page .tray-pool-btn {
+  width: 34px;
+  height: 34px;
+  font-size: 14px;
+}
+.dice-page .tray-roll {
+  padding: 8px 16px;
+  font-size: 12px;
+}
+.app.compact .dice-page .dice-tray {
+  width: 100%;
+  border-left: 0;
+  border-right: 0;
+}

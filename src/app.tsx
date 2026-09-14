@@ -4,10 +4,12 @@ import { newCampaignId } from './ledger/ids';
 import { blankLedger, exportLedger, importLedger } from './ledger/normalize';
 import type { Ledger, RollRecord } from './ledger/types';
 import { createStore, firebaseAvailable, forgetCampaign, recentCampaigns, rememberCampaign, type Store, type StoreStatus } from './sync';
-import { DEFAULT_VIEW, LedgerContext, makeLedgerApi, useLedger, visibleViews, type Role, type ViewId } from './ui/context';
+import { DEFAULT_VIEW, effectiveView, LedgerContext, makeLedgerApi, useLedger, visibleViews, type Role, type ViewId } from './ui/context';
+import { useCompact, writeLayoutPref, type LayoutPref } from './ui/layout';
 import { BOOK_EVENT, FIT_EVENT, HINT_EVENT, SWEEP_EVENT, SWEEP_STATE_EVENT, isTyping, setHint } from './ui/events';
 import { RollTicker } from './ui/RollTicker';
 import { campaignLink, hrefFor, navigate, useRoute } from './ui/route';
+import { DiceView } from './views/dice';
 import { PlayView } from './views/play';
 import { ReferencesView } from './views/references';
 import { SceneView } from './views/scene';
@@ -84,7 +86,9 @@ function Home() {
 
 // ---------------------------------------------------------------- campaign
 
-function Campaign({ campaignId, view, role }: { campaignId: string; view: ViewId; role: Role }) {
+function Campaign({ campaignId, view: routeView, role }: { campaignId: string; view: ViewId; role: Role }) {
+  const { compact, pref } = useCompact();
+  const view = effectiveView(routeView, compact);
   const store = useMemo<Store>(() => createStore(campaignId), [campaignId]);
   const [ledger, setLedger] = useState<Ledger | null | undefined>(undefined);
   const [status, setStatus] = useState<StoreStatus>({ state: 'connecting', live: false, mode: store.mode });
@@ -111,12 +115,12 @@ function Campaign({ campaignId, view, role }: { campaignId: string; view: ViewId
     const on = (e: KeyboardEvent) => {
       if (isTyping(e.target)) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      const v = visibleViews(role).find((x) => x.key === e.key);
+      const v = visibleViews(role, compact).find((x) => x.key === e.key);
       if (v) navigate(campaignId, v.id);
     };
     window.addEventListener('keydown', on);
     return () => window.removeEventListener('keydown', on);
-  }, [campaignId, role]);
+  }, [campaignId, role, compact]);
 
   if (ledger === undefined) {
     return (
@@ -157,8 +161,8 @@ function Campaign({ campaignId, view, role }: { campaignId: string; view: ViewId
 
   return (
     <LedgerContext.Provider value={api}>
-      <div class="app">
-        <Header campaignId={campaignId} view={view} />
+      <div class={`app${compact ? ' compact' : ''}`}>
+        <Header campaignId={campaignId} view={view} compact={compact} pref={pref} />
         <div class="view">
           {view === 'play' && <SceneView />}
           {view === 'sheets' && <SheetsView />}
@@ -166,8 +170,9 @@ function Campaign({ campaignId, view, role }: { campaignId: string; view: ViewId
           {view === 'network' && <TableView />}
           {view === 'sparks' && <SparksView />}
           {view === 'tools' && role === 'gm' && <PlayView />}
+          {view === 'dice' && <DiceView />}
         </div>
-        {view !== 'play' && <RollTicker />}
+        {view !== 'play' && view !== 'dice' && <RollTicker />}
       </div>
     </LedgerContext.Provider>
   );
@@ -175,7 +180,7 @@ function Campaign({ campaignId, view, role }: { campaignId: string; view: ViewId
 
 // ---------------------------------------------------------------- header
 
-function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
+function Header({ campaignId, view, compact, pref }: { campaignId: string; view: ViewId; compact: boolean; pref: LayoutPref }) {
   const { ledger, update, status, role } = useLedger();
   const [hint, setHintState] = useState('');
   const [menu, setMenu] = useState(false);
@@ -243,7 +248,7 @@ function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
         onInput={(e) => update({ 'crew/name': (e.currentTarget as HTMLInputElement).value })}
       />
       <nav class="tabs">
-        {visibleViews(role).map((v) => (
+        {visibleViews(role, compact).map((v) => (
           <button key={v.id} class={v.id === view ? 'active' : ''} onClick={() => navigate(campaignId, v.id)} title={`key ${v.key}`}>
             {v.label}
           </button>
@@ -251,12 +256,12 @@ function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
       </nav>
       <div class="hdr-hint">{hint}</div>
       <div class="hdr-spacer" />
-      {view === 'play' && (
+      {!compact && view === 'play' && (
         <button class={sweepArmed ? 'red book' : 'fit'} title="clear the scene" onClick={() => window.dispatchEvent(new CustomEvent(SWEEP_EVENT))}>
           SWEEP
         </button>
       )}
-      {view === 'network' && (
+      {!compact && view === 'network' && (
         <>
           <button class="fit" onClick={() => window.dispatchEvent(new CustomEvent(FIT_EVENT))}>
             FIT
@@ -309,6 +314,10 @@ function Header({ campaignId, view }: { campaignId: string; view: ViewId }) {
             </button>
             <button class="row" onClick={copyLedger}>
               Copy ledger to clipboard
+            </button>
+            <div class="sep" />
+            <button class="row" title="Compact shows only Sheets, References and Dice" onClick={() => writeLayoutPref(nextLayout(pref))}>
+              Layout: {pref === 'auto' ? `auto (${compact ? 'compact' : 'full'})` : pref}
             </button>
             <div class="sep" />
             <button
@@ -382,6 +391,10 @@ function statusLabel(s: StoreStatus): string {
     default:
       return 'SAVE FAILED';
   }
+}
+
+function nextLayout(p: LayoutPref): LayoutPref {
+  return p === 'auto' ? 'compact' : p === 'compact' ? 'full' : 'auto';
 }
 
 function slug(s: string): string {

@@ -15,6 +15,7 @@ describe('routes', () => {
     expect(parseView('tools', 'gm')).toBe('tools');
     expect(parseView('nonsense')).toBe('play');
     expect(parseView('references')).toBe('references');
+    expect(parseView('dice')).toBe('dice');
   });
   it('GM-only views fall back to Play for players', () => {
     expect(parseHash(`#/c/${ID}/tools`).view).toBe('play');

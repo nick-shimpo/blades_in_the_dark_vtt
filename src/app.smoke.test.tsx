@@ -18,6 +18,7 @@ import { SheetsView } from './views/sheets';
 import { SparksView } from './views/sparks';
 import { PlayView } from './views/play';
 import { SceneView } from './views/scene';
+import { DiceView } from './views/dice';
 import type { RollRecord } from './ledger/types';
 
 beforeAll(() => {
@@ -122,6 +123,16 @@ describe('views mount against the example ledger', () => {
     expect(text).toContain('You do it.');
     expect(text).toContain('Applied: 2 stress');
     expect(text).toContain('FORTUNE ROLL');
+    unmount();
+  });
+
+  it('Dice view renders the tray with the last roll', () => {
+    const roll: RollRecord = { id: 'r2', at: Date.now(), who: 'GM', kind: 'fortune', label: 'Fortune 2d', dice: [4, 1], pool: 2, result: 'partial' };
+    const { host, errors, unmount } = mountWith(DiceView, 'player', [roll]);
+    expect(errors).toEqual([]);
+    expect(host.textContent).toContain('Fortune 2d');
+    expect(host.textContent).toContain('PARTIAL');
+    expect(host.textContent).toContain('FORTUNE ROLL');
     unmount();
   });
 
