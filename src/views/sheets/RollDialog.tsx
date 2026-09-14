@@ -151,6 +151,7 @@ export function RollDialog({
       record.position = R.pos;
       record.effect = R.eff;
     }
+    if (applied.length) record.applied = applied.join(' · ');
     pushRoll(record);
     setRoll((prev) => (prev ? { ...prev, roll: result, applied: applied.length ? `Applied: ${applied.join(' · ')}` : '' } : prev));
   };

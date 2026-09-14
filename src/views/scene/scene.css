@@ -4,9 +4,15 @@
 
 /* ------------------------------------------------------------ surface */
 
-.scene {
+.scene-root {
   position: absolute;
   inset: 0;
+  display: flex;
+}
+.scene {
+  position: relative;
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   background-image: radial-gradient(rgba(34, 28, 19, 0.14) 1px, transparent 1px);
   background-size: 26px 26px;
@@ -272,4 +278,199 @@
   color: var(--ink);
   background: rgba(231, 223, 201, 0.85);
   pointer-events: none;
+}
+
+/* ------------------------------------------------------------ dice tray (reserved column) */
+
+.dice-tray {
+  flex: none;
+  width: 300px;
+  border-left: 1px solid var(--ink);
+  background: var(--sheet-rail);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  user-select: text;
+}
+.tray-bar {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-stencil);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 2.5px;
+  padding: 6px 12px;
+}
+.tray-sub {
+  font-family: var(--font-stencil);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  color: var(--muted);
+  padding: 10px 12px 4px;
+}
+.tray-empty {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--muted);
+  padding: 16px 12px;
+}
+.tray-latest {
+  background: var(--paper-light);
+  border-bottom: 1px solid var(--ink);
+  padding: 12px 12px 14px;
+}
+.tray-who {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.tray-name {
+  font-family: var(--font-title);
+  font-size: 22px;
+  line-height: 1.05;
+}
+.tray-time {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+.tray-meta {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.tray-dice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 12px 0 8px;
+}
+.tray-die {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--ink);
+  background: var(--clock-face);
+  box-shadow: 2px 2px 0 rgba(34, 28, 19, 0.25);
+  font-family: var(--font-stencil);
+  font-weight: 800;
+  font-size: 26px;
+}
+.tray-die.six {
+  color: var(--red);
+}
+.tray-die.small {
+  width: 22px;
+  height: 22px;
+  border-width: 1.5px;
+  box-shadow: none;
+  font-size: 14px;
+}
+.tray-zero {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+.tray-result {
+  font-family: var(--font-stencil);
+  font-weight: 800;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+.tray-result.bad {
+  color: var(--red);
+}
+.tray-outcome {
+  font-family: var(--font-sheet);
+  font-size: 14.5px;
+  line-height: 1.35;
+  margin-top: 8px;
+}
+.tray-applied {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--red);
+  margin-top: 6px;
+}
+.tray-history {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+.tray-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px dotted rgba(34, 28, 19, 0.3);
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+.tray-row-who {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tray-row-dice {
+  display: inline-flex;
+  gap: 3px;
+}
+.tray-row-result {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1px;
+  min-width: 34px;
+  text-align: right;
+}
+.tray-row-result.bad {
+  color: var(--red);
+}
+.tray-fortune {
+  border-top: 1px solid var(--ink);
+  padding-bottom: 12px;
+  margin-top: auto;
+}
+.tray-pool {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 0 12px;
+}
+.tray-pool-btn {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12px;
+}
+.tray-pool-btn.on {
+  background: var(--ink);
+  color: var(--paper);
+}
+.tray-roll {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 5px 12px;
 }

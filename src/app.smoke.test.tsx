@@ -17,6 +17,8 @@ import { TableView } from './views/table';
 import { SheetsView } from './views/sheets';
 import { SparksView } from './views/sparks';
 import { PlayView } from './views/play';
+import { SceneView } from './views/scene';
+import type { RollRecord } from './ledger/types';
 
 beforeAll(() => {
   // jsdom lacks these browser APIs the views use
@@ -35,7 +37,7 @@ beforeAll(() => {
   if (!svgProto.getBBox) svgProto.getBBox = () => ({ x: 0, y: 0, width: 0, height: 0 }) as DOMRect;
 });
 
-function mountWith(View: () => JSX.Element, role: 'gm' | 'player' = 'gm') {
+function mountWith(View: () => JSX.Element, role: 'gm' | 'player' = 'gm', rolls: RollRecord[] = []) {
   const ledger = importLedger(JSON.stringify(example))!;
   const store = createStore('smoketestcampaign0001');
   store.replace(ledger);
@@ -48,11 +50,12 @@ function mountWith(View: () => JSX.Element, role: 'gm' | 'player' = 'gm') {
     ledger: store.current()!,
     store,
     status: { state: 'saved', live: false, mode: 'local' },
-    rolls: [],
+    rolls,
     role,
     update: (p) => store.update(p),
     replace: (l) => store.replace(l),
     pushRoll: () => {},
+    clearRolls: () => {},
   });
   render(
     <LedgerContext.Provider value={api}>
@@ -105,6 +108,20 @@ describe('views mount against the example ledger', () => {
     const text = host.textContent ?? '';
     expect(text).toMatch(/GENERIC/);
     expect(text).toMatch(/FACTIONS/);
+    unmount();
+  });
+
+  it('Play shows the last shared roll in the dice tray', () => {
+    const roll: RollRecord = { id: 'r1', at: Date.now(), who: 'Cross', kind: 'action', label: 'Skirmish', position: 'risky', effect: 'standard', dice: [6, 3], pool: 2, result: 'success', applied: '2 stress' };
+    const { host, errors, unmount } = mountWith(SceneView, 'player', [roll]);
+    expect(errors).toEqual([]);
+    const text = host.textContent ?? '';
+    expect(text).toContain('Cross');
+    expect(text).toContain('Skirmish');
+    expect(text).toContain('FULL SUCCESS');
+    expect(text).toContain('You do it.');
+    expect(text).toContain('Applied: 2 stress');
+    expect(text).toContain('FORTUNE ROLL');
     unmount();
   });
 

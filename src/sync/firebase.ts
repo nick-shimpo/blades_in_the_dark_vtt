@@ -131,6 +131,11 @@ export class FirebaseStore implements Store {
     const r = push(ref(database(), `campaigns/${this.campaignId}/rolls`));
     void set(r, sanitize({ ...roll, id: r.key ?? roll.id }));
   }
+  clearRolls() {
+    this.rolls = [];
+    for (const l of [...this.rollsLs]) l(this.rolls);
+    void set(ref(database(), `campaigns/${this.campaignId}/rolls`), null);
+  }
   close() {
     for (const u of this.unsubs) u();
     this.unsubs = [];

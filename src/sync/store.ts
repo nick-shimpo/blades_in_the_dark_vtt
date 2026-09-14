@@ -33,6 +33,8 @@ export interface Store {
   update(patch: Patch): void;
   replace(ledger: Ledger): void;
   pushRoll(roll: RollRecord): void;
+  /** Forget every shared roll (the Play view's sweep does this). */
+  clearRolls(): void;
   close(): void;
 }
 
@@ -208,6 +210,10 @@ export class LocalStore implements Store {
   }
   pushRoll(roll: RollRecord) {
     this.rolls = [...this.rolls, roll].slice(-20);
+    this.rollsEv.emit(this.rolls);
+  }
+  clearRolls() {
+    this.rolls = [];
     this.rollsEv.emit(this.rolls);
   }
   close() {

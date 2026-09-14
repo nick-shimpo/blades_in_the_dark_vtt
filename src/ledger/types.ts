@@ -181,6 +181,8 @@ export interface RollRecord {
   dice: number[];
   pool: number;
   result: 'critical' | 'success' | 'partial' | 'failure';
+  /** What the roll did to the sheet, e.g. "2 stress · 1 xp in prowess" (action and resistance rolls). */
+  applied?: string;
 }
 
 // ---------------------------------------------------------------- v1 file shape

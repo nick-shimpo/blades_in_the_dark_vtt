@@ -21,6 +21,7 @@ export interface LedgerApi {
   /** Write only the changed top-level fields of a table card. */
   saveNode(before: TableNode, after: TableNode): void;
   pushRoll(roll: RollRecord): void;
+  clearRolls(): void;
 }
 
 export const LedgerContext = createContext<LedgerApi | null>(null);

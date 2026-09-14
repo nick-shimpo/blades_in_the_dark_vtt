@@ -57,6 +57,7 @@ function mount() {
     update: (p) => store.update(p),
     replace: (l) => store.replace(l),
     pushRoll: () => {},
+    clearRolls: () => {},
   });
   render(
     <LedgerContext.Provider value={api}>

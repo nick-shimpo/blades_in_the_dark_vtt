@@ -16,6 +16,7 @@ import { addCustomNode, type Point } from '../table/actions';
 import { RadialMenu, type RadialItem } from '../table/RadialMenu';
 import { CardItem, NEXT_TYPE, type CardHandlers } from './CardItem';
 import { ClockItem, type ClockHandlers } from './ClockItem';
+import { DiceTray } from './DiceTray';
 import { inSceneControl } from './hooks';
 import './scene.css';
 
@@ -176,6 +177,7 @@ export function SceneView() {
   useWindowEvent(SWEEP_EVENT, () => {
     if (latest.current.sweepArmed) {
       latest.current.api.update({ 'scene/items': null });
+      latest.current.api.clearRolls();
       setSweepArmed(false);
       setSelId(null);
       setArmed(false);
@@ -381,6 +383,7 @@ export function SceneView() {
           ];
 
   return (
+    <div class="scene-root">
     <div ref={surfaceRef} class="scene" onPointerDown={onSurfaceDown} onContextMenu={onSurfaceMenu} onDblClick={onSurfaceDbl}>
       <div ref={worldRef} class="scene-world" style={{ width: WORLD_W, height: WORLD_H, transform: `translate(${geo.ox}px,${geo.oy}px) scale(${geo.s})` }}>
         {ordered.map((it) =>
@@ -392,6 +395,8 @@ export function SceneView() {
         )}
       </div>
       {radial && <RadialMenu x={radial.x} y={radial.y} items={radialItems} onPick={() => setRadial(null)} />}
+    </div>
+    <DiceTray />
     </div>
   );
 }

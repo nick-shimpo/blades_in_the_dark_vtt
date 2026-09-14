@@ -152,6 +152,7 @@ function Campaign({ campaignId, view, role }: { campaignId: string; view: ViewId
     update: (p) => store.update(p),
     replace: (l) => store.replace(l),
     pushRoll: (r) => store.pushRoll(r),
+    clearRolls: () => store.clearRolls(),
   });
 
   return (
@@ -166,7 +167,7 @@ function Campaign({ campaignId, view, role }: { campaignId: string; view: ViewId
           {view === 'sparks' && <SparksView />}
           {view === 'tools' && role === 'gm' && <PlayView />}
         </div>
-        <RollTicker />
+        {view !== 'play' && <RollTicker />}
       </div>
     </LedgerContext.Provider>
   );

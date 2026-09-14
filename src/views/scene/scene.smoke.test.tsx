@@ -62,6 +62,7 @@ function mountScene() {
     replace: (l) => store.replace(l),
     role: 'gm',
     pushRoll: () => {},
+    clearRolls: () => {},
   });
   render(
     <LedgerContext.Provider value={api}>
