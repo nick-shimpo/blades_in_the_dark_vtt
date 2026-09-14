@@ -79,79 +79,58 @@ function mount() {
 const flush = () => new Promise<void>((r) => setTimeout(r, 0));
 
 const railLabels = (host: HTMLElement) => Array.from(host.querySelectorAll('.rf-rail .rf-entry-label')).map((el) => el.textContent);
-const mainTitle = (host: HTMLElement) => host.querySelector('.rf-main h2')?.textContent;
+const mainImage = (host: HTMLElement) => host.querySelector<HTMLImageElement>('.rf-main img')?.getAttribute('src') ?? null;
 const railButton = (host: HTMLElement, label: string) =>
   Array.from(host.querySelectorAll<HTMLButtonElement>('.rf-rail .rf-entry')).find((b) => b.querySelector('.rf-entry-label')?.textContent === label);
 
 describe('References view', () => {
-  it('lists the eight built sheets and the Doskvol handout in the rail', () => {
+  it('lists the player kit pages in the rail, rules first and the map under handouts', () => {
     const { host, errors, unmount } = mount();
     expect(errors).toEqual([]);
-    const labels = railLabels(host);
-    expect(labels).toEqual([
-      'Action Roll',
-      'Position & Effect',
-      'Consequences & Resistance',
-      'Teamwork',
-      'Planning & Engagement',
-      'Downtime',
-      'Advancement & the Faction Game',
-      'The Twelve Actions & Gathering Information',
-      'Doskvol',
-    ]);
-    expect(MANIFEST.filter((e) => e.kind === 'sheet')).toHaveLength(8);
-    const text = host.querySelector('.rf-rail')?.textContent ?? '';
+    expect(railLabels(host)).toEqual(['Simple Rules Overview', 'Rules Reference 1', 'Rules Reference 2', 'GM Reference', 'Standard Items & Vice Purveyors', 'Doskvol']);
+    expect(MANIFEST).toHaveLength(6);
+    expect(MANIFEST.every((e) => e.kind === 'image')).toBe(true);
+    const text = host.textContent ?? '';
     expect(text).toContain('RULES');
     expect(text).toContain('MAPS & HANDOUTS');
     unmount();
   });
 
-  it('shows the first built sheet in the main panel by default, with its rules text', () => {
+  it('shows the first page by default with its credit', () => {
     const { host, errors, unmount } = mount();
     expect(errors).toEqual([]);
-    expect(mainTitle(host)).toBe('Action Roll');
-    const main = host.querySelector('.rf-main')?.textContent ?? '';
-    expect(main).toContain('The player states their goal for the action.');
-    expect(main).toContain('You do it with increased effect.');
-    expect(main).toContain("It's the worst outcome.");
+    expect(mainImage(host)).toMatch(/references\/playerkit-p01\.png$/);
+    expect(host.querySelector('.rf-main figcaption')?.textContent).toBe('Blades in the Dark Player Kit v8.2, p. 1');
     unmount();
   });
 
   it('switches the main panel when another rail entry is clicked and remembers it', async () => {
     const { host, errors, unmount } = mount();
-    const teamwork = railButton(host, 'Teamwork');
-    expect(teamwork).toBeDefined();
-    teamwork!.click();
+    const map = railButton(host, 'Doskvol');
+    expect(map).toBeDefined();
+    map!.click();
     await flush();
     expect(errors).toEqual([]);
-    expect(mainTitle(host)).toBe('Teamwork');
-    expect(teamwork!.getAttribute('aria-pressed')).toBe('true');
-    expect(railButton(host, 'Action Roll')!.getAttribute('aria-pressed')).toBe('false');
-    expect(host.querySelector('.rf-main')?.textContent).toContain('best result counts for all');
-    expect(localStorage.getItem(LAST_KEY)).toBe('teamwork');
+    expect(mainImage(host)).toMatch(/references\/playerkit-p22\.png$/);
+    expect(map!.getAttribute('aria-pressed')).toBe('true');
+    expect(railButton(host, 'Simple Rules Overview')!.getAttribute('aria-pressed')).toBe('false');
+    expect(localStorage.getItem(LAST_KEY)).toBe('kit-doskvol-map');
     unmount();
-
-    // a fresh mount on the same browser opens the remembered sheet
     const again = mount();
-    expect(mainTitle(again.host)).toBe('Teamwork');
+    expect(mainImage(again.host)).toMatch(/playerkit-p22\.png$/);
     again.unmount();
   });
 
-  it('shows the image handout with its credit when selected', async () => {
+  it('degrades gracefully when an image file is missing', async () => {
     const { host, errors, unmount } = mount();
-    railButton(host, 'Doskvol')!.click();
-    await flush();
-    expect(errors).toEqual([]);
-    const img = host.querySelector<HTMLImageElement>('.rf-main .rf-figure img');
+    const img = host.querySelector<HTMLImageElement>('.rf-main img');
     expect(img).not.toBeNull();
-    expect(img!.getAttribute('src')).toMatch(/references\/doskvol-map\.png$/);
-    expect(host.querySelector('.rf-main figcaption')?.textContent).toBe('Official map, Blades in the Dark core rulebook');
-    // a failed load degrades to the "not yet added" note in the rail and the main panel
     img!.dispatchEvent(new Event('error'));
     await flush();
-    expect(host.querySelector('.rf-main')?.textContent).toContain('references/doskvol-map.png');
+    expect(errors).toEqual([]);
+    expect(host.querySelector('.rf-main')?.textContent).toContain('references/playerkit-p01.png');
     expect(host.querySelector('.rf-main')?.textContent).toContain('has not been added to the repo yet');
-    expect(railButton(host, 'Doskvol')!.textContent).toContain('not yet added');
+    expect(railButton(host, 'Simple Rules Overview')!.textContent).toContain('not yet added');
     unmount();
   });
 });

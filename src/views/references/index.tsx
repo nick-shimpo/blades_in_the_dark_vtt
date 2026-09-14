@@ -7,7 +7,7 @@
 import type { JSX } from 'preact';
 import { useCallback, useState } from 'preact/hooks';
 import { ATTRIBUTION } from '../../data';
-import { MANIFEST, type RefEntry } from './manifest';
+import { groupOf, MANIFEST, type RefEntry } from './manifest';
 import './references.css';
 
 const LAST_KEY = 'doskvol-table:references:last';
@@ -34,7 +34,7 @@ function assetUrl(file: string): string {
 }
 
 export function ReferencesView() {
-  const firstSheet = MANIFEST.find((e) => e.kind === 'sheet') ?? MANIFEST[0];
+  const firstSheet = MANIFEST[0];
   const [selId, setSelId] = useState<string>(() => {
     const last = readLast();
     return last && MANIFEST.some((e) => e.id === last) ? last : firstSheet.id;
@@ -50,8 +50,8 @@ export function ReferencesView() {
     writeLast(id);
   };
 
-  const rules = MANIFEST.filter((e) => e.kind === 'sheet');
-  const handouts = MANIFEST.filter((e) => e.kind === 'image');
+  const rules = MANIFEST.filter((e) => groupOf(e) === 'rules');
+  const handouts = MANIFEST.filter((e) => groupOf(e) === 'handouts');
 
   const entry = (e: RefEntry) => {
     const on = e.id === sel.id;
@@ -108,9 +108,9 @@ export function ReferencesView() {
   return (
     <div class="refs">
       <aside class="rf-rail">
-        <div class="rf-rail-label">RULES</div>
+        {rules.length > 0 && <div class="rf-rail-label">RULES</div>}
         {rules.map(entry)}
-        <div class="rf-rail-label">MAPS &amp; HANDOUTS</div>
+        {handouts.length > 0 && <div class="rf-rail-label">MAPS &amp; HANDOUTS</div>}
         {handouts.map(entry)}
         <div class="rf-rail-spacer" />
         <div class="rf-rail-attrib">{ATTRIBUTION}</div>
