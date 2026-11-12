@@ -53,7 +53,8 @@ export function CardItem({ card: k, selected, armed, focusTitle, h }: CardItemPr
 
   return (
     <div class={`scene-item${selected ? ' sel' : ''}`} data-scene-id={k.id} style={{ left: k.x, top: k.y, width: CARD_W }} onPointerDown={(e) => h.onDown(e, k.id)}>
-      <div class="scene-card" style={selected ? { boxShadow: `${ring}4px 4px 0 rgba(34,28,19,0.28)` } : undefined}>
+      <div class={`scene-card${k.gmOnly ? ' scene-card-gm' : ''}`} style={selected ? { boxShadow: `${ring}4px 4px 0 rgba(34,28,19,0.28)` } : undefined}>
+        {k.gmOnly && <div class="scene-card-visibility">GM ONLY</div>}
         <div class="scene-card-head">
           <button
             type="button"

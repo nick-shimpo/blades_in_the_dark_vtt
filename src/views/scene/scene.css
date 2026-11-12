@@ -474,3 +474,13 @@
   letter-spacing: 1px;
   padding: 5px 12px;
 }
+
+/* Private reminders retain the paper style with a muted blue tint and explicit label. */
+.scene-card-gm { background: #e2e9e8; border-color: #657c80; }
+.scene-card-gm .scene-card-head { border-bottom-color: #657c80; }
+.scene-card-visibility {
+  padding: 6px 14px 0;
+  color: #465e63;
+  font: 10px var(--font-mono, monospace);
+  letter-spacing: 0.12em;
+}

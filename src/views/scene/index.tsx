@@ -1,6 +1,6 @@
 /**
  * The Scene: the shared surface for the moment of play. A fixed 1440 × 810 tabletop, scaled to
- * fit each viewer's window, carrying big progress clocks and index cards that everyone sees live.
+ * fit each viewer's window, carrying big progress clocks and index cards, including GM-only reminders.
  * Everything shown is derived from `ledger.scene.items` on every render; only UI state lives here
  * (selection, arming, the open radial, which text is being edited, the two-step sweep, a drag in
  * progress, the measured view size).
@@ -83,7 +83,8 @@ export function SceneView() {
   latest.current = { api, view, selId, armed, radial, editing, sweepArmed };
 
   // ---- derived from the ledger (a drag in progress overrides the dragged item's position)
-  const stored = itemsOf(ledger);
+  const stored = useMemo(() => Object.fromEntries(Object.entries(itemsOf(ledger)).filter(([, it]) =>
+    api.role === 'gm' || it.kind !== 'card' || !it.gmOnly)), [ledger.scene, api.role]);
   const items = useMemo<Record<string, SceneItem>>(() => {
     if (!dragPos || !stored[dragPos.id]) return stored;
     return { ...stored, [dragPos.id]: { ...stored[dragPos.id], x: dragPos.x, y: dragPos.y } };
@@ -152,9 +153,10 @@ export function SceneView() {
     const id = newId('s');
     add({ id, kind: 'clock', name: 'New clock', size: 6, filled: 0, x: Math.round(p.x - 100), y: Math.round(p.y - 90), createdAt: Date.now() }, id);
   };
-  const addCard = (p: Point) => {
+  const addCard = (p: Point, gmOnly = false) => {
+    if (gmOnly && latest.current.api.role !== 'gm') return;
     const id = newId('s');
-    add({ id, kind: 'card', type: 'other', title: '', body: '', x: Math.round(p.x - 150), y: Math.round(p.y - 80), createdAt: Date.now() }, `${id}:title`);
+    add({ id, kind: 'card', gmOnly, type: 'other', title: '', body: '', x: Math.round(p.x - 150), y: Math.round(p.y - 80), createdAt: Date.now() }, `${id}:title`);
   };
   const showFlash = (text: string) => {
     window.clearTimeout(flashTimer.current);
@@ -165,7 +167,7 @@ export function SceneView() {
   const toTable = (id: string) => {
     const a = latest.current.api;
     const k = cardOf(id);
-    if (!k) return;
+    if (!k || k.gmOnly) return;
     const crew = crewNode(a.ledger);
     const name = k.title.trim() || 'Untitled card';
     addCustomNode(a, k.type, name, crew ? { x: crew.x, y: crew.y } : undefined, { notes: k.body });
@@ -176,7 +178,11 @@ export function SceneView() {
   // ---- SWEEP: the header button dispatches; the Scene owns the two-step and tells the header when it is armed
   useWindowEvent(SWEEP_EVENT, () => {
     if (latest.current.sweepArmed) {
-      latest.current.api.update({ 'scene/items': null });
+      const a = latest.current.api;
+      const patch = Object.fromEntries(Object.values(itemsOf(a.ledger))
+        .filter((it) => a.role === 'gm' || it.kind !== 'card' || !it.gmOnly)
+        .map((it) => [`scene/items/${it.id}`, null]));
+      if (Object.keys(patch).length) a.update(patch);
       latest.current.api.clearRolls();
       setSweepArmed(false);
       setSelId(null);
@@ -371,6 +377,7 @@ export function SceneView() {
       ? [
           { glyph: '◔', label: 'CLOCK', act: () => addClock({ x: radial.wx, y: radial.wy }) },
           { glyph: '▭', label: 'CARD', act: () => addCard({ x: radial.wx, y: radial.wy }) },
+          ...(api.role === 'gm' ? [{ glyph: '▣', label: 'GM CARD', act: () => addCard({ x: radial.wx, y: radial.wy }, true) }] : []),
         ]
       : target.kind === 'clock'
         ? [
@@ -378,7 +385,8 @@ export function SceneView() {
             { glyph: '✕', label: 'REMOVE', danger: true, act: arm(target.id) },
           ]
         : [
-            { glyph: '⤢', label: 'TO NETWORK', act: () => toTable(target.id) },
+            ...(api.role === 'gm' ? [{ glyph: '◐', label: target.gmOnly ? 'SHOW PLAYERS' : 'GM ONLY', act: () => write(target.id, 'gmOnly', !target.gmOnly) }] : []),
+            ...(!target.gmOnly ? [{ glyph: '⤢', label: 'TO NETWORK', act: () => toTable(target.id) }] : []),
             { glyph: '✕', label: 'REMOVE', danger: true, act: arm(target.id) },
           ];
 

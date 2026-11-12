@@ -395,7 +395,7 @@ export function normalizeSceneItem(raw: unknown, fallbackId?: string): SceneItem
   }
   if (it.kind === 'card') {
     const type = SCENE_CARD_TYPES.includes(str(it.type) as SceneCardType) ? (str(it.type) as SceneCardType) : 'other';
-    return { ...base, kind: 'card', type, title: str(it.title), body: str(it.body) };
+    return { ...base, kind: 'card', type, title: str(it.title), body: str(it.body), ...(it.gmOnly === true ? { gmOnly: true } : {}) };
   }
   return null; // unknown kinds (e.g. handouts from an older design) are dropped
 }

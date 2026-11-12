@@ -147,6 +147,8 @@ export type SceneCardType = 'npc' | 'location' | 'other';
 export interface SceneCard {
   id: string;
   kind: 'card';
+  /** Hidden in the player UI; the shared ledger is not an access-control boundary. */
+  gmOnly?: boolean;
   x: number;
   y: number;
   createdAt: number;
