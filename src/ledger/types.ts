@@ -134,6 +134,8 @@ export type SceneItem = SceneClock | SceneCard;
 export interface SceneClock {
   id: string;
   kind: 'clock';
+  /** Hidden in the player UI, like GM-only scene cards. */
+  gmOnly?: boolean;
   x: number;
   y: number;
   createdAt: number;

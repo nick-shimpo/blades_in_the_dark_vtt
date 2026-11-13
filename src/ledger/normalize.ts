@@ -391,7 +391,7 @@ export function normalizeSceneItem(raw: unknown, fallbackId?: string): SceneItem
   if (it.kind === 'clock') {
     const size = num(it.size, 6);
     const okSize = [4, 6, 8, 10, 12].includes(size) ? size : 6;
-    return { ...base, kind: 'clock', name: str(it.name, 'New clock'), size: okSize, filled: Math.max(0, Math.min(okSize, num(it.filled, 0))) };
+    return { ...base, kind: 'clock', ...(it.gmOnly === true ? { gmOnly: true } : {}), name: str(it.name, 'New clock'), size: okSize, filled: Math.max(0, Math.min(okSize, num(it.filled, 0))) };
   }
   if (it.kind === 'card') {
     const type = SCENE_CARD_TYPES.includes(str(it.type) as SceneCardType) ? (str(it.type) as SceneCardType) : 'other';

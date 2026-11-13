@@ -47,9 +47,11 @@ const CARD: SceneCard = {
 
 const PRIVATE: SceneCard = { ...CARD, id: 's_private', title: 'Secret reminder', gmOnly: true };
 
-function mountScene(role: 'gm' | 'player' = 'gm', withPrivate = false) {
+const PRIVATE_CLOCK: SceneClock = { ...CLOCK, id: 's_private_clock', name: 'Secret countdown', gmOnly: true };
+
+function mountScene(role: 'gm' | 'player' = 'gm', withPrivate = false, withPrivateClock = false) {
   const ledger = importLedger(JSON.stringify(example))!;
-  ledger.scene = { items: { [CLOCK.id]: CLOCK, [CARD.id]: CARD, ...(withPrivate ? { [PRIVATE.id]: PRIVATE } : {}) } };
+  ledger.scene = { items: { [CLOCK.id]: CLOCK, [CARD.id]: CARD, ...(withPrivate ? { [PRIVATE.id]: PRIVATE } : {}), ...(withPrivateClock ? { [PRIVATE_CLOCK.id]: PRIVATE_CLOCK } : {}) } };
   const store = createStore('smoketestscene00001');
   store.replace(ledger);
   const errors: unknown[] = [];
@@ -140,6 +142,51 @@ describe('GM-only scene cards', () => {
     const added = Object.values(store.current()!.scene.items).find(it => it.id !== CARD.id && it.id !== CLOCK.id);
     expect(added).toMatchObject({ kind: 'card', gmOnly: true });
     expect(host.querySelector('.scene-card-gm')).not.toBeNull();
+    unmount();
+  });
+});
+
+
+describe('GM-only scene clocks', () => {
+  it('preserves clock visibility through export/import without changing existing public clocks', () => {
+    const ledger = importLedger(JSON.stringify(example))!;
+    ledger.scene.items = { [PRIVATE_CLOCK.id]: PRIVATE_CLOCK, [CLOCK.id]: CLOCK };
+    const restored = importLedger(JSON.stringify(exportLedger(ledger)))!;
+    expect(restored.scene.items[PRIVATE_CLOCK.id]).toMatchObject({ gmOnly: true });
+    expect(restored.scene.items[CLOCK.id]).not.toHaveProperty('gmOnly');
+  });
+
+  it('lets the GM hide and reveal a clock with a visible private label', async () => {
+    const { host, store, unmount } = mountScene('gm');
+    const menu = async () => { await act(() => void host.querySelector('[data-scene-id="s_clock1"] .scene-clock-name')!.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))); };
+    await menu();
+    await act(() => (host.querySelector('[title="GM ONLY"]') as HTMLElement).click());
+    expect(store.current()!.scene.items[CLOCK.id]).toMatchObject({ gmOnly: true });
+    expect(host.querySelector('.scene-clock-gm')?.textContent).toContain('GM ONLY');
+    await menu();
+    await act(() => (host.querySelector('[title="SHOW PLAYERS"]') as HTMLElement).click());
+    expect(store.current()!.scene.items[CLOCK.id].gmOnly).not.toBe(true);
+    expect(host.querySelector('.scene-clock-gm')).toBeNull();
+    unmount();
+  });
+
+  it('hides private clocks from players and preserves them during sweep', async () => {
+    const { host, store, unmount } = mountScene('player', false, true);
+    expect(host.textContent).not.toContain('Secret countdown');
+    expect(host.querySelector('[data-scene-id="s_private_clock"]')).toBeNull();
+    await act(() => void host.querySelector('.scene-world')!.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true })));
+    expect(host.querySelector('[title="GM CLOCK"]')).toBeNull();
+    await act(() => void window.dispatchEvent(new CustomEvent(SWEEP_EVENT)));
+    await act(() => void window.dispatchEvent(new CustomEvent(SWEEP_EVENT)));
+    expect(Object.keys(store.current()!.scene.items)).toEqual([PRIVATE_CLOCK.id]);
+    unmount();
+  });
+
+  it('creates a private clock without first showing it to players', async () => {
+    const { host, store, unmount } = mountScene('gm');
+    await act(() => void host.querySelector('.scene-world')!.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true })));
+    await act(() => (host.querySelector('[title="GM CLOCK"]') as HTMLElement).click());
+    expect(Object.values(store.current()!.scene.items).find(it => it.id !== CARD.id && it.id !== CLOCK.id)).toMatchObject({ kind: 'clock', gmOnly: true });
     unmount();
   });
 });

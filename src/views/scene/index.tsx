@@ -84,7 +84,7 @@ export function SceneView() {
 
   // ---- derived from the ledger (a drag in progress overrides the dragged item's position)
   const stored = useMemo(() => Object.fromEntries(Object.entries(itemsOf(ledger)).filter(([, it]) =>
-    api.role === 'gm' || it.kind !== 'card' || !it.gmOnly)), [ledger.scene, api.role]);
+    api.role === 'gm' || !it.gmOnly)), [ledger.scene, api.role]);
   const items = useMemo<Record<string, SceneItem>>(() => {
     if (!dragPos || !stored[dragPos.id]) return stored;
     return { ...stored, [dragPos.id]: { ...stored[dragPos.id], x: dragPos.x, y: dragPos.y } };
@@ -149,9 +149,10 @@ export function SceneView() {
     setRadial(null);
     setEditing(edit);
   };
-  const addClock = (p: Point) => {
+  const addClock = (p: Point, gmOnly = false) => {
+    if (gmOnly && latest.current.api.role !== 'gm') return;
     const id = newId('s');
-    add({ id, kind: 'clock', name: 'New clock', size: 6, filled: 0, x: Math.round(p.x - 100), y: Math.round(p.y - 90), createdAt: Date.now() }, id);
+    add({ id, kind: 'clock', gmOnly, name: 'New clock', size: 6, filled: 0, x: Math.round(p.x - 100), y: Math.round(p.y - 90), createdAt: Date.now() }, id);
   };
   const addCard = (p: Point, gmOnly = false) => {
     if (gmOnly && latest.current.api.role !== 'gm') return;
@@ -180,7 +181,7 @@ export function SceneView() {
     if (latest.current.sweepArmed) {
       const a = latest.current.api;
       const patch = Object.fromEntries(Object.values(itemsOf(a.ledger))
-        .filter((it) => a.role === 'gm' || it.kind !== 'card' || !it.gmOnly)
+        .filter((it) => a.role === 'gm' || !it.gmOnly)
         .map((it) => [`scene/items/${it.id}`, null]));
       if (Object.keys(patch).length) a.update(patch);
       latest.current.api.clearRolls();
@@ -376,11 +377,13 @@ export function SceneView() {
     : !target
       ? [
           { glyph: '◔', label: 'CLOCK', act: () => addClock({ x: radial.wx, y: radial.wy }) },
+          ...(api.role === 'gm' ? [{ glyph: '◔', label: 'GM CLOCK', act: () => addClock({ x: radial.wx, y: radial.wy }, true) }] : []),
           { glyph: '▭', label: 'CARD', act: () => addCard({ x: radial.wx, y: radial.wy }) },
           ...(api.role === 'gm' ? [{ glyph: '▣', label: 'GM CARD', act: () => addCard({ x: radial.wx, y: radial.wy }, true) }] : []),
         ]
       : target.kind === 'clock'
         ? [
+            ...(api.role === 'gm' ? [{ glyph: '◐', label: target.gmOnly ? 'SHOW PLAYERS' : 'GM ONLY', act: () => write(target.id, 'gmOnly', !target.gmOnly) }] : []),
             { glyph: '↺', label: 'RESET', act: () => write(target.id, 'filled', 0) },
             { glyph: '✕', label: 'REMOVE', danger: true, act: arm(target.id) },
           ]

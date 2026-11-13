@@ -31,14 +31,15 @@ export function ClockItem({ clock: c, selected, armed, editing, h }: ClockItemPr
   const seg = 360 / c.size;
   const deg = Math.max(0, Math.min(c.size, c.filled)) * seg;
   const full = c.filled >= c.size && c.size > 0;
-  const face = `conic-gradient(var(--red) 0deg ${deg}deg, var(--clock-face) ${deg}deg 360deg)`;
+  const face = `conic-gradient(${c.gmOnly ? '#657c80' : 'var(--red)'} 0deg ${deg}deg, ${c.gmOnly ? '#e2e9e8' : 'var(--clock-face)'} ${deg}deg 360deg)`;
   const dividers = `repeating-conic-gradient(from -1deg, var(--ink) 0deg 2deg, transparent 2deg ${seg}deg)`;
   const ring = selected ? `0 0 0 2px ${armed ? 'var(--red)' : 'var(--ink)'}` : '';
   const shadow = [ring, full ? '0 0 0 4px rgba(140,47,27,0.35)' : '2px 2px 0 rgba(34,28,19,0.25)'].filter(Boolean).join(', ');
 
   return (
     <div class={`scene-item${selected ? ' sel' : ''}`} data-scene-id={c.id} style={{ left: c.x, top: c.y, width: CLOCK_W }} onPointerDown={(e) => h.onDown(e, c.id)}>
-      <div class="scene-clock">
+      <div class={`scene-clock${c.gmOnly ? ' scene-clock-gm' : ''}`}>
+        {c.gmOnly && <div class="scene-card-visibility">GM ONLY</div>}
         <button
           type="button"
           class="scene-dial"
