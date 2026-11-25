@@ -83,7 +83,8 @@ export function Dossier({ node, crewTypeName, armed, onArm, onDelete, onStartLin
     writeClock(c);
     setNewName('');
   };
-  const source = `${rec ? `FROM THE BOOK${node.page ? ` · p. ${node.page}` : ''}` : 'YOUR OWN ENTRY'} · ${TYPE_TAG[node.type]}`;
+  const sourceLabel = rec?.kind === 'faction' && rec.entry.source === 'deep-cuts' ? 'FROM DEEP CUTS' : rec ? 'FROM THE BOOK' : 'YOUR OWN ENTRY';
+  const source = `${sourceLabel}${rec && node.page ? ` · p. ${node.page}` : ''} · ${TYPE_TAG[node.type]}`;
   const showTier = isCrew || node.type === 'faction' || node.type === 'org' || node.type === 'other';
   const isFactionLike = node.type === 'faction' || node.type === 'org';
 

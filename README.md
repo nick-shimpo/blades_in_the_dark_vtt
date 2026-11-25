@@ -12,6 +12,12 @@ Live at **https://nick-shimpo.github.io/blades_in_the_dark_vtt/**
 - No accounts, no roles, no server code of ours, and no file uploads. See `docs/decisions/` for why.
 - On a phone or tablet (viewport 1024 px or narrower) the app switches to a **compact layout** with just Sheets, References and Dice; the canvases need a desktop. The ☰ menu can force the layout either way.
 
+## Deep Cuts faction support
+
+The **Network → From the Book → Factions** picker includes the 11 additional factions introduced by *Blades in the Dark: Deep Cuts*, marked **DC** and searchable using the **DEEP CUTS** chip. They include Strangford House and Ironworks Labor. Each has a compact original GM-facing summary, pertinent named contacts/relationships and a starting faction clock; their dossiers are editable after adding them to the Network.
+
+The data lives in `src/data/deep-cuts-factions.json` and is merged with the core faction catalogue at runtime without changing existing ledger IDs. The full expansion, original artwork and detailed rules text are **not** distributed in this public repository. Consult your copy of [Deep Cuts](https://johnharper.itch.io/deep-cuts) for the full treatment. These faction additions do not automatically enable the expansion's optional changes to action, downtime, load, advancement or other mechanics.
+
 ## Develop
 
 ```
