@@ -580,6 +580,7 @@ export function bookChips(tab: BookKind): [string, string][] {
       ['institutions', 'INSTITUTIONS'],
       ['labor_and_trade', 'LABOR & TRADE'],
       ['fringe', 'FRINGE'],
+      ['deep-cuts', 'DEEP CUTS'],
     ];
   if (tab === 'npc')
     return [
@@ -616,12 +617,12 @@ export function bookRows(nodes: Record<string, TableNode>, tab: BookKind, q: str
   let rows: Omit<BookRow, 'node'>[] = [];
   if (tab === 'faction') {
     rows = book.factions
-      .filter((f) => f.id !== 'citizenry' && (!cat || f.category === cat) && (has(f.name) || has(f.summary) || has(f.category)))
+      .filter((f) => f.id !== 'citizenry' && (!cat || (cat === 'deep-cuts' ? f.source === 'deep-cuts' : f.category === cat)) && (has(f.name) || has(f.summary) || has(f.category) || (f.source === 'deep-cuts' && has('deep cuts'))))
       .map((f) => ({
         kind: tab,
         ref: f.id,
         name: f.name,
-        c1: categoryShort(f.category),
+        c1: `${categoryShort(f.category)}${f.source === 'deep-cuts' ? ' · DC' : ''}`,
         c2: `T ${roman(f.tier)}${f.hold ? ` · ${f.hold.toUpperCase()}` : ''}`,
         c3: cut(f.summary, 110),
       }));
