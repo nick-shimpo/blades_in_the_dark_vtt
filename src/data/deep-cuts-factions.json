@@ -1,0 +1,686 @@
+{
+  "manifest": {
+    "source": "Blades in the Dark: Deep Cuts, faction entries (John Harper; v1.2)",
+    "scope": "11 factions absent from core roster. Facts condensed into original GM-ready notes; no artwork or book text reproduced.",
+    "reference": "https://johnharper.itch.io/deep-cuts"
+  },
+  "factions": [
+    {
+      "id": "tangletown",
+      "name": "Tangletown",
+      "category": "underworld",
+      "tier": 2,
+      "hold": "strong",
+      "source": "deep-cuts",
+      "summary": "Floating neutral territory for criminal negotiations; a disputed killing threatens its fragile peace.",
+      "detail": {
+        "page": 28,
+        "tagline": "Floating neutral territory for criminal negotiations; a disputed killing threatens its fragile peace.",
+        "turf": "Moored vessels forming a river settlement.",
+        "npcs": [
+          {
+            "name": "Mardin Gull",
+            "role": "community elder and banker",
+            "traits": []
+          }
+        ],
+        "notable_assets": "Local watchmen, secure meeting places and an informal bank.",
+        "quirks": "Underworld factions normally honour the settlement's neutrality.",
+        "allies": [
+          {
+            "name": "The Crows",
+            "faction_id": "crows"
+          },
+          {
+            "name": "The Lampblacks",
+            "faction_id": "lampblacks"
+          }
+        ],
+        "enemies": [
+          {
+            "name": "The Bluecoats",
+            "faction_id": "bluecoats"
+          }
+        ],
+        "situation": "A wartime atrocity has prompted a killing inside protected territory, dividing criminal factions over what justice demands.",
+        "clocks": [
+          {
+            "name": "Settle the Volker killing",
+            "segments": 6,
+            "repeating": false
+          },
+          {
+            "name": "Underworld war",
+            "segments": 6,
+            "repeating": false
+          }
+        ]
+      },
+      "listed_in_faction_table": true,
+      "pages": [
+        28
+      ],
+      "npc_ids": [],
+      "location_ids": []
+    },
+    {
+      "id": "covenant",
+      "name": "Covenant",
+      "category": "institutions",
+      "tier": 6,
+      "hold": "strong",
+      "source": "deep-cuts",
+      "summary": "An Imperial war airship towering over Doskvol, armed and bound to a secret rescue mission.",
+      "detail": {
+        "page": 13,
+        "tagline": "An Imperial war airship towering over Doskvol, armed and bound to a secret rescue mission.",
+        "turf": "Airspace above Doskvol and the governor's high docking facilities.",
+        "npcs": [
+          {
+            "name": "Admiral Bowmore",
+            "role": "commander",
+            "traits": []
+          },
+          {
+            "name": "Commander Farros",
+            "role": "executive officer",
+            "traits": []
+          },
+          {
+            "name": "Sergeant Major Kain",
+            "role": "marine officer",
+            "traits": []
+          }
+        ],
+        "notable_assets": "Armoured airship, heavy arc weapons, marines and searchlights.",
+        "quirks": "Its crew conceal an encounter with a fracture in the ghost field.",
+        "allies": [
+          {
+            "name": "Imperial Military",
+            "faction_id": "imperial-military"
+          },
+          {
+            "name": "Rowan House",
+            "faction_id": "rowan-house"
+          },
+          {
+            "name": "Sparkwrights",
+            "faction_id": "sparkwrights"
+          }
+        ],
+        "enemies": [
+          {
+            "name": "City Council",
+            "faction_id": "city-council"
+          }
+        ],
+        "situation": "The Covenant's escort ship vanished into another reality, and its admiral covertly searches for a way to retrieve the crew.",
+        "clocks": [
+          {
+            "name": "Recover the Verdict",
+            "segments": 12,
+            "repeating": false
+          }
+        ]
+      },
+      "listed_in_faction_table": true,
+      "pages": [
+        13
+      ],
+      "npc_ids": [],
+      "location_ids": []
+    },
+    {
+      "id": "unity-commission",
+      "name": "Unity Commission",
+      "category": "institutions",
+      "tier": 5,
+      "hold": "strong",
+      "source": "deep-cuts",
+      "summary": "The Emperor's secret-police-style inspectors enforce unconditional loyalty across Imperial institutions.",
+      "detail": {
+        "page": 31,
+        "tagline": "The Emperor's secret-police-style inspectors enforce unconditional loyalty across Imperial institutions.",
+        "turf": "Government buildings, barracks and the imperial court.",
+        "npcs": [
+          {
+            "name": "Commissioner Blackthorn",
+            "role": "Doskvol commissioner",
+            "traits": []
+          }
+        ],
+        "notable_assets": "Investigators, propagandists, interrogators and lavish funding.",
+        "quirks": "Commissioners wield authority over officials who otherwise outrank them.",
+        "allies": [
+          {
+            "name": "Imperial Military",
+            "faction_id": "imperial-military"
+          }
+        ],
+        "enemies": [
+          {
+            "name": "City Council",
+            "faction_id": "city-council"
+          },
+          {
+            "name": "Ministry of Preservation",
+            "faction_id": "ministry-of-preservation"
+          }
+        ],
+        "situation": "Officials are pressed to accept supernatural oaths while the Emperor prepares for threats his advisers foresee.",
+        "clocks": [
+          {
+            "name": "Secure universal loyalty",
+            "segments": 12,
+            "repeating": false
+          }
+        ]
+      },
+      "listed_in_faction_table": true,
+      "pages": [
+        31
+      ],
+      "npc_ids": [],
+      "location_ids": []
+    },
+    {
+      "id": "rowan-house",
+      "name": "Rowan House",
+      "category": "institutions",
+      "tier": 4,
+      "hold": "strong",
+      "source": "deep-cuts",
+      "summary": "A heavily armed noble dynasty whose powerful family members guard a secret from another world.",
+      "detail": {
+        "page": 23,
+        "tagline": "A heavily armed noble dynasty whose powerful family members guard a secret from another world.",
+        "turf": "Fortress in Six Towers, private transport links and palace offices.",
+        "npcs": [
+          {
+            "name": "Veretta Rowan",
+            "role": "matriarch",
+            "traits": []
+          },
+          {
+            "name": "Lynthia Rowan",
+            "role": "councilor",
+            "traits": []
+          },
+          {
+            "name": "Elder Rowan",
+            "role": "Church leader",
+            "traits": []
+          },
+          {
+            "name": "Viktor Rowan",
+            "role": "Ministry official",
+            "traits": []
+          }
+        ],
+        "notable_assets": "Vast wealth, loyal soldiers, ships and trains.",
+        "quirks": "Senior Rowans practise an old form of sorcery.",
+        "allies": [
+          {
+            "name": "Church of Ecstasy",
+            "faction_id": "church-of-ecstasy"
+          },
+          {
+            "name": "City Council",
+            "faction_id": "city-council"
+          },
+          {
+            "name": "Covenant",
+            "faction_id": "covenant"
+          },
+          {
+            "name": "Imperial Military",
+            "faction_id": "imperial-military"
+          },
+          {
+            "name": "Ministry of Preservation",
+            "faction_id": "ministry-of-preservation"
+          }
+        ],
+        "enemies": [
+          {
+            "name": "Strangford House",
+            "faction_id": "strangford-house"
+          },
+          {
+            "name": "Strangers",
+            "faction_id": "strangers"
+          }
+        ],
+        "situation": "A rash of arrivals from another world risks revealing the family's ancestral secret and threatens its political plans.",
+        "clocks": [
+          {
+            "name": "Capture the Strangers",
+            "segments": 6,
+            "repeating": true
+          },
+          {
+            "name": "Take Imperial power",
+            "segments": 12,
+            "repeating": false
+          }
+        ]
+      },
+      "listed_in_faction_table": true,
+      "pages": [
+        23
+      ],
+      "npc_ids": [],
+      "location_ids": []
+    },
+    {
+      "id": "strangford-house",
+      "name": "Strangford House",
+      "category": "institutions",
+      "tier": 3,
+      "hold": "weak",
+      "source": "deep-cuts",
+      "summary": "A leviathan-hunting dynasty backed by workhouse interests and fearful of the city's dwindling blood supply.",
+      "detail": {
+        "page": 28,
+        "tagline": "A leviathan-hunting dynasty backed by workhouse interests and fearful of the city's dwindling blood supply.",
+        "turf": "Family manor in Charhollow; holdings in Whitecrown and the Imperial Palace.",
+        "npcs": [
+          {
+            "name": "Lord Erul Strangford",
+            "role": "patriarch, hunter captain, councilor and Church adept",
+            "traits": []
+          }
+        ],
+        "notable_assets": "Hunting fleet, substantial wealth, private security and transport.",
+        "quirks": "The patriarch belongs to the Church's influential inner circle.",
+        "allies": [
+          {
+            "name": "Bluecoats",
+            "faction_id": "bluecoats"
+          },
+          {
+            "name": "Leviathan Hunters",
+            "faction_id": "leviathan-hunters"
+          }
+        ],
+        "enemies": [
+          {
+            "name": "Ministry of Preservation",
+            "faction_id": "ministry-of-preservation"
+          },
+          {
+            "name": "Rowan House",
+            "faction_id": "rowan-house"
+          },
+          {
+            "name": "Iruvian Consulate",
+            "faction_id": "iruvian-consulate"
+          }
+        ],
+        "situation": "Strangford agents compete with Ministry investigators to acquire Iruvian hunting knowledge as old methods fail.",
+        "clocks": [
+          {
+            "name": "Steal Iruvian hunting secrets",
+            "segments": 8,
+            "repeating": false
+          }
+        ]
+      },
+      "listed_in_faction_table": true,
+      "pages": [
+        28
+      ],
+      "npc_ids": [],
+      "location_ids": []
+    },
+    {
+      "id": "ironworks-labor",
+      "name": "Ironworks Labor",
+      "category": "labor_and_trade",
+      "tier": 2,
+      "hold": "strong",
+      "source": "deep-cuts",
+      "summary": "Organised factory hands in Coalridge and Charhollow are striking for recognition and humane treatment.",
+      "detail": {
+        "page": 20,
+        "tagline": "Organised factory hands in Coalridge and Charhollow are striking for recognition and humane treatment.",
+        "turf": "Workhouses, factories, union-friendly pubs and gathering spaces.",
+        "npcs": [
+          {
+            "name": "Belle Brogan",
+            "role": "labour activist",
+            "traits": []
+          },
+          {
+            "name": "Rock Cullen",
+            "role": "organiser",
+            "traits": []
+          }
+        ],
+        "notable_assets": "Solidarity networks and support from Skovlander musicians.",
+        "quirks": "Refusing to repair the hunting fleet gives the workers leverage.",
+        "allies": [
+          {
+            "name": "Rail Jacks",
+            "faction_id": "rail-jacks"
+          },
+          {
+            "name": "Laborers",
+            "faction_id": "laborers"
+          }
+        ],
+        "enemies": [
+          {
+            "name": "Bluecoats",
+            "faction_id": "bluecoats"
+          },
+          {
+            "name": "City Council",
+            "faction_id": "city-council"
+          },
+          {
+            "name": "Strangford House",
+            "faction_id": "strangford-house"
+          }
+        ],
+        "situation": "A general strike meets organised Bluecoat violence as workers push to unionise.",
+        "clocks": [
+          {
+            "name": "Win union recognition",
+            "segments": 12,
+            "repeating": false
+          }
+        ]
+      },
+      "listed_in_faction_table": true,
+      "pages": [
+        20
+      ],
+      "npc_ids": [],
+      "location_ids": []
+    },
+    {
+      "id": "void-divers",
+      "name": "Void Divers",
+      "category": "labor_and_trade",
+      "tier": 2,
+      "hold": "strong",
+      "source": "deep-cuts",
+      "summary": "Secretive underwater explorers investigating the Void Sea with experimental Imperial equipment.",
+      "detail": {
+        "page": 31,
+        "tagline": "Secretive underwater explorers investigating the Void Sea with experimental Imperial equipment.",
+        "turf": "Harbour facilities and offshore training stations.",
+        "npcs": [
+          {
+            "name": "Master Chief Booker",
+            "role": "dive master",
+            "traits": []
+          }
+        ],
+        "notable_assets": "Experimental diving suits, submersibles and survey gear.",
+        "quirks": "Though officially naval, the divers withhold many of their findings.",
+        "allies": [
+          {
+            "name": "Ministry of Preservation",
+            "faction_id": "ministry-of-preservation"
+          }
+        ],
+        "enemies": [
+          {
+            "name": "Gondoliers",
+            "faction_id": "gondoliers"
+          }
+        ],
+        "situation": "An unnatural discovery on the sea floor has begun influencing the divers' commander.",
+        "clocks": [
+          {
+            "name": "Answer Setarra's call",
+            "segments": 6,
+            "repeating": false
+          }
+        ]
+      },
+      "listed_in_faction_table": true,
+      "pages": [
+        31
+      ],
+      "npc_ids": [],
+      "location_ids": []
+    },
+    {
+      "id": "ragskulla",
+      "name": "Ragskulla",
+      "category": "fringe",
+      "tier": 2,
+      "hold": "strong",
+      "source": "deep-cuts",
+      "summary": "Players and supporters of a dangerous Skovlish rope-top sport campaign for legal recognition.",
+      "detail": {
+        "page": 21,
+        "tagline": "Players and supporters of a dangerous Skovlish rope-top sport campaign for legal recognition.",
+        "turf": "Rooftop rigging and improvised sporting grounds.",
+        "npcs": [
+          {
+            "name": "Alley Cats",
+            "role": "team",
+            "traits": []
+          },
+          {
+            "name": "Brickston Bruisers",
+            "role": "team",
+            "traits": []
+          }
+        ],
+        "notable_assets": "Fans, teams, wagers and athletic rope-work.",
+        "quirks": "The game is outlawed, allowing Bluecoat harassment and extortion.",
+        "allies": [
+          {
+            "name": "Ironworks Labor",
+            "faction_id": "ironworks-labor"
+          },
+          {
+            "name": "Sparkrunners",
+            "faction_id": "sparkrunners"
+          }
+        ],
+        "enemies": [
+          {
+            "name": "Bluecoats",
+            "faction_id": "bluecoats"
+          }
+        ],
+        "situation": "Supporters organise against gambling seizures and arrests to make the game lawful.",
+        "clocks": [
+          {
+            "name": "Legalise Ragskulla",
+            "segments": 8,
+            "repeating": false
+          }
+        ]
+      },
+      "listed_in_faction_table": true,
+      "pages": [
+        21
+      ],
+      "npc_ids": [],
+      "location_ids": []
+    },
+    {
+      "id": "sparkrunners",
+      "name": "Sparkrunners",
+      "category": "fringe",
+      "tier": 1,
+      "hold": "strong",
+      "source": "deep-cuts",
+      "summary": "Inventive rooftop revolutionaries undermine Imperial technology using stolen spark-craft.",
+      "detail": {
+        "page": 25,
+        "tagline": "Inventive rooftop revolutionaries undermine Imperial technology using stolen spark-craft.",
+        "turf": "Observation tower near Charterhall University and nearby roofs.",
+        "npcs": [
+          {
+            "name": "Anson",
+            "role": "founder and former Sparkwright",
+            "traits": []
+          },
+          {
+            "name": "Five Twelve",
+            "role": "free hull ally",
+            "traits": []
+          }
+        ],
+        "notable_assets": "Tools, experimental devices and arcane engineering supplies.",
+        "quirks": "Scientists who treat sabotage as a political duty.",
+        "allies": [
+          {
+            "name": "Ironworks Labor",
+            "faction_id": "ironworks-labor"
+          },
+          {
+            "name": "The Unchained",
+            "faction_id": "unchained"
+          }
+        ],
+        "enemies": [
+          {
+            "name": "Imperial Military",
+            "faction_id": "imperial-military"
+          }
+        ],
+        "situation": "They repeatedly raid and damage Imperial installations while testing unusual inventions.",
+        "clocks": [
+          {
+            "name": "Sabotage Imperial technology",
+            "segments": 4,
+            "repeating": true
+          }
+        ]
+      },
+      "listed_in_faction_table": true,
+      "pages": [
+        25
+      ],
+      "npc_ids": [],
+      "location_ids": []
+    },
+    {
+      "id": "unchained",
+      "name": "The Unchained",
+      "category": "fringe",
+      "tier": 1,
+      "hold": "strong",
+      "source": "deep-cuts",
+      "summary": "Independent Hulls demand freedom and legal recognition for all self-directed constructs.",
+      "detail": {
+        "page": 29,
+        "tagline": "Independent Hulls demand freedom and legal recognition for all self-directed constructs.",
+        "turf": "A hidden machine shop in south Nightmarket.",
+        "npcs": [
+          {
+            "name": "Archer",
+            "role": "organiser",
+            "traits": []
+          },
+          {
+            "name": "Key",
+            "role": "curious floating hull",
+            "traits": []
+          },
+          {
+            "name": "Pike",
+            "role": "protector",
+            "traits": []
+          },
+          {
+            "name": "Mason",
+            "role": "mechanic",
+            "traits": []
+          }
+        ],
+        "notable_assets": "Mechanical spare parts, workshop tools and refuelling equipment.",
+        "quirks": "Every member escaped a former owner.",
+        "allies": [
+          {
+            "name": "Reconciled",
+            "faction_id": "reconciled"
+          },
+          {
+            "name": "Sparkrunners",
+            "faction_id": "sparkrunners"
+          }
+        ],
+        "enemies": [
+          {
+            "name": "Imperial Military",
+            "faction_id": "imperial-military"
+          },
+          {
+            "name": "Sparkwrights",
+            "faction_id": "sparkwrights"
+          },
+          {
+            "name": "Spirit Wardens",
+            "faction_id": "spirit-wardens"
+          }
+        ],
+        "situation": "The Hulls build a coalition for full civic status and autonomous lives.",
+        "clocks": [
+          {
+            "name": "Recognise Hull citizenship",
+            "segments": 12,
+            "repeating": false
+          }
+        ]
+      },
+      "listed_in_faction_table": true,
+      "pages": [
+        29
+      ],
+      "npc_ids": [],
+      "location_ids": []
+    },
+    {
+      "id": "strangers",
+      "name": "Strangers",
+      "category": "fringe",
+      "tier": 0,
+      "hold": "weak",
+      "source": "deep-cuts",
+      "summary": "Visitors from a second living world arrive through mysterious openings in the ghost field.",
+      "detail": {
+        "page": 27,
+        "tagline": "Visitors from a second living world arrive through mysterious openings in the ghost field.",
+        "turf": "No organised territory.",
+        "npcs": [],
+        "notable_assets": "Individual strangers have different backgrounds and means.",
+        "quirks": "Recent arrivals can be unusually conspicuous to arcane senses.",
+        "allies": [],
+        "enemies": [
+          {
+            "name": "Rowan House",
+            "faction_id": "rowan-house"
+          },
+          {
+            "name": "Spirit Wardens",
+            "faction_id": "spirit-wardens"
+          }
+        ],
+        "situation": "More frequent fractures bring outsiders into Doskvol, drawing attention from those guarding supernatural secrets.",
+        "clocks": [
+          {
+            "name": "Find more Strangers",
+            "segments": 8,
+            "repeating": true
+          }
+        ]
+      },
+      "listed_in_faction_table": true,
+      "pages": [
+        27
+      ],
+      "npc_ids": [],
+      "location_ids": []
+    }
+  ]
+}
