@@ -157,6 +157,33 @@ describe('the Book', () => {
   });
 });
 
+describe('Deep Cuts factions', () => {
+  it('adds the eleven supplemental factions without losing the core roster', () => {
+    const added = book.factions.filter((f) => f.source === 'deep-cuts');
+    expect(added).toHaveLength(11);
+    expect(book.factions.find((f) => f.id === 'crows')).toBeDefined();
+    expect(A.bookRows({}, 'faction', '', 'deep-cuts')).toHaveLength(11);
+    expect(A.bookChips('faction')).toContainEqual(['deep-cuts', 'DEEP CUTS']);
+  });
+
+  it('adds a Strangford dossier with its existing threat clock', () => {
+    const api = fakeApi();
+    const n = A.addBookNode(api, 'faction', 'strangford-house')!;
+    expect(n.name).toBe('Strangford House');
+    expect(n.tier).toBe('III');
+    expect(n.f.enemies).toContain('Ministry of Preservation');
+    expect(Object.values(n.clocks)).toEqual([
+      expect.objectContaining({ name: 'Steal Iruvian hunting secrets', size: 8 }),
+    ]);
+    expect(A.relatedOf(n).some((r) => r.kind === 'faction' && r.ref === 'ministry-of-preservation')).toBe(true);
+  });
+
+  it('includes Ironworks Labor as a searchable Tier II faction', () => {
+    const rows = A.bookRows({}, 'faction', 'ironworks', '');
+    expect(rows.some((r) => r.ref === 'ironworks-labor' && r.c2.includes('II'))).toBe(true);
+  });
+});
+
 describe('schema fields', () => {
   it('reads the prototype key names as fallbacks and keeps them in step on write', () => {
     const node = { f: { ltype: 'tavern' } } as unknown as TableNode;
