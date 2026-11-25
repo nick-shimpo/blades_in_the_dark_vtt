@@ -3,6 +3,7 @@
  * The JSON never changes at runtime; everything here is read-only.
  */
 import bookJson from './book.json';
+import deepCutsJson from './deep-cuts-factions.json';
 import sheetsJson from './sheets.json';
 import sparksJson from './sparks.json';
 import claimsJson from './claims-maps.json';
@@ -209,6 +210,8 @@ export interface Faction {
   category: string;
   tier: number;
   hold: 'strong' | 'weak' | string;
+  /** Deep Cuts additions are available alongside the core book, without changing saved node refs. */
+  source?: 'deep-cuts';
   summary: string | null;
   detail: FactionDetail | null;
   listed_in_faction_table: boolean;
@@ -299,7 +302,10 @@ export interface BookData {
   generators: Record<string, unknown>;
 }
 
-export const book = bookJson as unknown as BookData;
+export const book = {
+  ...bookJson,
+  factions: [...bookJson.factions, ...deepCutsJson.factions],
+} as unknown as BookData;
 
 const byId = <T extends { id: string }>(xs: T[]) => new Map(xs.map((x) => [x.id, x] as const));
 export const bookIndex = {
